@@ -9,39 +9,43 @@ function init(event) {
 
 
 }
-
 const mainDiv = document.querySelector('#main')
 
+function displayHomeDiv(event) {
+    mainDiv.innerHTML = ''
+    mainDiv.innerHTML =
+        '<h1>Pick the Dates</h1>' +
+        '<p>This web app helps friends to pick the best date to meet.</p>' +
+        '<button>Create event</button>'
+}
 
+//Functions to handle Events List
 function displayListDiv(event) {
     mainDiv.innerHTML = ""
     
     mainDiv.innerHTML =
         '<h1>Current Events</h1>'
-        // '<ul>' +
-        // `    <li data-id="1">Steph's party </li>` +
-        // '  <li data-id="2">Vacation planing meating</li>' +
-        // ' </ul>'
     console.log(event)
 
     fetch('http://localhost:3000/events')
         .then((response) => response.json())
         .then(createList)
         .catch((error) => console.error(error.message))
-        const ul = document.createElement('ul')
-        mainDiv.append(ul)
+        const list = document.createElement('ul')
+        list.classList.add("list-group")
+        mainDiv.append(list)
     function createList( data) {
         for (let element of data) {
             const li = document.createElement('li')
             li.dataset.eventId=element.id
             li.textContent=element.title
-            ul.append(li)
+            li.classList.add("list-group-item")
+            list.append(li)
         }
     }
-
 }
 
-
+//Functions to handle create Event
 function displayCreateDiv(event) {
     mainDiv.innerHTML = ""
     mainDiv.innerHTML =
@@ -55,13 +59,31 @@ function displayCreateDiv(event) {
         ' <input type="date" name="end-data" />' +
         '<input type="submit" value="Submit" style="background-color: #F9AA33;">' +
         ' </form>'
-
-    console.log(event)
+    const form = document.querySelector('form')
+    form.addEventListener('submit',createEvent)
 }
-function displayHomeDiv(event) {
-    mainDiv.innerHTML = ''
-    mainDiv.innerHTML =
-        '<h1>Pick the Dates</h1>' +
-        '<p>This web app helps friends to pick the best date to meet.</p>' +
-        '<button>Create event</button>'
+
+function createEvent(event) {
+    event.preventDefault()
+    const input = event.target.querySelector("input[name='event-name']").value
+    const start = event.target.querySelector("input[name='start-data']").value
+    const end = event.target.querySelector("input[name='end-data']").value
+
+    const formData = {
+    
+        "title": `${input}`,
+        "start": `${start}`,
+        "end": `${end}`,
+    }
+    fetch('http://localhost:3000/events',{
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+        },
+        body: JSON.stringify(formData),
+    })
+        .then((response) => response.json())
+        .then((data) => console.log(data))
+        .catch((error) => console.error(error.message))
 }
