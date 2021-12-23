@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>PickTheDate</title>
+
+  
+	<link rel="stylesheet" href="./css/index.css">
+</head>
+<body>
+    <nav>
+            <ul>
+              <li>PickTheDate</li>
+              <li>Create Event</li>
+              <li>Events List</li>
+            </ul>
+    </nav>
+    
+    <div id="main-home" class="main">
+
+        <h1>Pick the Dates</h1>
+        <p>This web app helps friends to pick the best date to meet.</p>
+        <button>Create event</button>
+    </div>
+
+    <div class="main" id="main-create">
+        <h1>Create New Event</h1>
+            <form action="#" id="new-event">
+                <label id="event-name">Event name</label>
+                <input type="text" name="event-name" />
+                <label id="start-data">From</label>
+                <input type="date" name="start-data" />
+                <label id="start-data">Till</label>
+                <input type="date" name="end-data" />
+                <input type="submit" value="submit" style="background-color: #F9AA33;">
+            </form>
+    </div>
+
+    <div id="main-list"  class="main">
+        <h1>Current Events</h1>
+        <ul>
+            <li data-id="1">Steph's party </li>
+            <li data-id="2">Vacation planing meating</li>
+        </ul>
+    </div>      
+
+    <div id="main-event"  class="main">
+        <h1> Steph's party </h1>
+        <div > 
+            <p>The most popular date for this event:</p>
+            <p>Wednesday, 1/18/2022</p>
+            <p> selected by 5 particpants from 10</p>
+        </div>
+        <button>Participate</button>
+    </div> 
+
+	<script type="text/javascript" src="./js/index.js"></script>
+</body>
+</html>
