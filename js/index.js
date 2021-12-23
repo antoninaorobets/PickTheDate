@@ -1,5 +1,6 @@
 document.addEventListener('DOMContentLoaded', init)
 function init(event) {
+    displayHomeDiv() 
     const home = document.querySelector('#home')
     home.addEventListener('click', displayHomeDiv)
     const list = document.querySelector('#event-list')
@@ -11,12 +12,16 @@ function init(event) {
 }
 const mainDiv = document.querySelector('#main')
 
-function displayHomeDiv(event) {
+function displayHomeDiv() {
     mainDiv.innerHTML = ''
     mainDiv.innerHTML =
         '<h1>Pick the Dates</h1>' +
-        '<p>This web app helps friends to pick the best date to meet.</p>' +
-        '<button>Create event</button>'
+        '<p>This web app helps friends to pick the best date to meet.</p>' 
+        // '<button>Create event</button>'
+    const createBtn = document.createElement('button') 
+    createBtn.addEventListener('click', displayCreateDiv)
+    createBtn.textContent = 'Create Event'
+    mainDiv.append(createBtn)
 }
 
 //Functions to handle Events List
@@ -70,7 +75,6 @@ function createEvent(event) {
     const end = event.target.querySelector("input[name='end-data']").value
 
     const formData = {
-    
         "title": `${input}`,
         "start": `${start}`,
         "end": `${end}`,
