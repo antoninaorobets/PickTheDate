@@ -71,14 +71,27 @@ function displayCreateDiv(event) {
 function createEvent(event) {
     event.preventDefault()
     const input = event.target.querySelector("input[name='event-name']").value
-    const start = event.target.querySelector("input[name='start-data']").value
+    let start = event.target.querySelector("input[name='start-data']").value
     const end = event.target.querySelector("input[name='end-data']").value
+    const interval = getNumberOfDays(start, end) 
+    const dateRange =[start]
 
+    for (let i=0;i<interval;i++) {
+        let d = new Date(start)
+        d.setDate(d.getDate() + 1)
+        dateRange.push(d)
+        start = d
+        console.log(d)
+    }
+    console.log(dateRange)
     const formData = {
         "title": `${input}`,
         "start": `${start}`,
         "end": `${end}`,
+        "days": dateRange,
     }
+    
+
     fetch('http://localhost:3000/events',{
         method: "POST",
         headers: {
@@ -88,6 +101,25 @@ function createEvent(event) {
         body: JSON.stringify(formData),
     })
         .then((response) => response.json())
-        .then((data) => console.log(data))
+        .then(displayCurrentDiv)
         .catch((error) => console.error(error.message))
 }
+
+function getNumberOfDays(start, end) {
+    const date1 = new Date(start);
+    const date2 = new Date(end);
+    const oneDay = 1000 * 60 * 60 * 24;
+    const diffInTime = date2.getTime() - date1.getTime();
+    const diffInDays = Math.round(diffInTime / oneDay);
+    return diffInDays;
+}
+
+function displayCurrentDiv(data){
+    mainDiv.innerHTML = ""
+    
+    const title = document.createElement('h1')
+    title.textContent = data.title
+    mainDiv.append(title)
+    console.log(data)
+}
+
