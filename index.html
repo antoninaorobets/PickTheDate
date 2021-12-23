@@ -2,28 +2,31 @@
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
-	<title>PickTheDate</title>
-
-  
+	<title>PickTheDate</title>  
 	<link rel="stylesheet" href="./css/index.css">
+     <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous"> -->
 </head>
 <body>
     <nav>
-            <ul>
-              <li>PickTheDate</li>
-              <li>Create Event</li>
-              <li>Events List</li>
+            <ul class="nav" >
+              <li id="home" class="nav"> <a> Home </a></li>
+              <li id="create-event" class="nav"> <a>Create Event</a></li>
+              <li id="event-list" class="nav"><a>Events List</a></li>
             </ul>
     </nav>
-    
-    <div id="main-home" class="main">
-
+    <div id="main">
         <h1>Pick the Dates</h1>
         <p>This web app helps friends to pick the best date to meet.</p>
         <button>Create event</button>
     </div>
 
-    <div class="main" id="main-create">
+    <!-- <div id="main-home" class="main">
+
+        <h1>Pick the Dates</h1>
+        <p>This web app helps friends to pick the best date to meet.</p>
+        <button>Create event</button>
+    </div> -->
+    <!-- <div class="main" id="main-create">
         <h1>Create New Event</h1>
             <form action="#" id="new-event">
                 <label id="event-name">Event name</label>
@@ -32,7 +35,7 @@
                 <input type="date" name="start-data" />
                 <label id="start-data">Till</label>
                 <input type="date" name="end-data" />
-                <input type="submit" value="submit" style="background-color: #F9AA33;">
+                <input type="submit" value="Submit" style="background-color: #F9AA33;">
             </form>
     </div>
 
@@ -52,7 +55,7 @@
             <p> selected by 5 particpants from 10</p>
         </div>
         <button>Participate</button>
-    </div> 
+    </div>  -->
 
 	<script type="text/javascript" src="./js/index.js"></script>
 </body>
