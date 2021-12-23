@@ -6,7 +6,7 @@ function init(event) {
     list.addEventListener('click', displayListDiv)
     const create = document.querySelector('#create-event')
     create.addEventListener('click', displayCreateDiv)
-    tryDB() 
+
 
 }
 
@@ -15,14 +15,32 @@ const mainDiv = document.querySelector('#main')
 
 function displayListDiv(event) {
     mainDiv.innerHTML = ""
+    
     mainDiv.innerHTML =
-        '<h1>Current Events</h1>' +
-        '<ul>' +
-        `    <li data-id="1">Steph's party </li>` +
-        '  <li data-id="2">Vacation planing meating</li>' +
-        ' </ul>'
+        '<h1>Current Events</h1>'
+        // '<ul>' +
+        // `    <li data-id="1">Steph's party </li>` +
+        // '  <li data-id="2">Vacation planing meating</li>' +
+        // ' </ul>'
     console.log(event)
+
+    fetch('http://localhost:3000/events')
+        .then((response) => response.json())
+        .then(createList)
+        .catch((error) => console.error(error.message))
+        const ul = document.createElement('ul')
+        mainDiv.append(ul)
+    function createList( data) {
+        for (let element of data) {
+            const li = document.createElement('li')
+            li.dataset.eventId=element.id
+            li.textContent=element.title
+            ul.append(li)
+        }
+    }
+
 }
+
 
 function displayCreateDiv(event) {
     mainDiv.innerHTML = ""
@@ -46,16 +64,4 @@ function displayHomeDiv(event) {
         '<h1>Pick the Dates</h1>' +
         '<p>This web app helps friends to pick the best date to meet.</p>' +
         '<button>Create event</button>'
-
-    console.log(event)
-}
-
-function tryDB() {
-
-
-    fetch('http://localhost:3000/events')
-        .then((response) => response.json())
-        .then((object) => console.log(object))
-        .catch((error) => console.error(error.message))
-
 }
