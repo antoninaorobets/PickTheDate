@@ -1,0 +1,90 @@
+body {
+    margin: 0;
+    color: #232F34;
+    background-color:#f2f2f2;
+}
+button { 
+    background-color: #F9AA33;
+    padding: 14px 40px;
+    border-radius: 4px;
+    border: 2px solid #4a6572;
+}
+
+div#main {
+    border-radius: 5px;
+    background-color: #f2f2f2;
+    padding: 20px;
+    /* display: block; */
+  
+
+  }
+
+/* NAV */
+ul.nav {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #F9AA33;
+  }
+  
+  li.nav {
+    float: left;
+  }
+  
+  li.nav  a {
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+  }
+  
+  li.nav a:hover {
+    background-color: #4a6572;
+
+  }
+  
+  /* .active {
+    background-color: #e7ebec;
+    color: #232F34;
+  } */
+
+
+
+
+
+
+/* Form */
+form {
+
+ 
+}
+input[type=text], select {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+  }
+  input[type=text]:focus {
+    border: 3px solid #4a6572;
+  }
+  input[type=submit] {
+    width: 100%;
+    /* background-color: #4CAF50; */
+    color: white;
+    padding: 14px 20px;
+    margin: 8px 0;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  input[type=submit]:hover {
+    /* background-color: #45a049; */
+  }
+  
+  
