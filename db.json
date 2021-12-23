@@ -1,0 +1,26 @@
+
+    {
+        "id": 1,
+        "title": "Steph's party",
+        "startDate": "2022-11-8",
+        "endDate": "2022-11-10",
+        "days": [{
+                "day": "Monday",
+                "date": "2022-11-8",
+                "participants": ["masha", "sasha", "max"]
+            },
+            {
+                "day": "Tuesday",
+                "date": "2022-11-9",
+                "participants": ["masha", "max"]
+            },
+            {
+                "day": "Wednesday",
+                "date": "2022-11-10",
+                "participants": ["max"]
+            }
+        ]
+    }
+
+
+
