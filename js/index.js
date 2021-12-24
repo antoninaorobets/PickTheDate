@@ -21,6 +21,7 @@ function displayHomeDiv() {
     const createBtn = document.createElement('button') 
     createBtn.addEventListener('click', displayCreateDiv)
     createBtn.textContent = 'Create Event'
+    createBtn.id = "create-btn"
     createBtn.classList.add("btn")
     createBtn.classList.add("btn-primary")
     mainDiv.append(createBtn)
@@ -68,14 +69,19 @@ function displayCreateDiv(event) {
     mainDiv.innerHTML = ""
     mainDiv.innerHTML =
         '<h1>Create New Event</h1>' +
-        '<form action="#" id="new-event">' +
-        '<label id="event-name">Event name</label>' +
-        ' <input type="text" name="event-name" />' +
-        ' <label id="start-data">From</label>' +
-        '<input type="date" name="start-data" />' +
-        ' <label id="start-data">Till</label>' +
-        ' <input type="date" name="end-data" />' +
-        '<input type="submit" value="Submit" style="background-color: #F9AA33;">' +
+        
+        '<form action="#" id="new-event" class="row g-3">' +
+        '<div class="col-12">'+
+        '<label id="event-name"  class="form-label">Event name</label>' +
+        ' <input type="text" name="event-name" class="form-control"/> </div>' +
+        ' <div class="col-md-6">'+
+        ' <label id="start-data"   class="form-label">From date</label>' +
+        '<input type="date" name="start-data"  class="form-control"/> </div>' +
+        ' <div class="col-md-6">'+
+        ' <label id="start-data"  class="form-label">Till date</label>' +
+        ' <input type="date" name="end-data" class="form-control" /> </div>' +
+
+        '<input type="submit" value="Submit" class="btn btn-primary" style="background-color: #F9AA33;">' +
         ' </form>'
     const form = document.querySelector('form')
     form.addEventListener('submit',createEvent)

@@ -1,7 +1,7 @@
 body {
     margin: 0;
     color: #232F34;
-    background-color:#f2f2f2;
+    /* background-color:#f2f2f2; */
 }
 button { 
     background-color: #F9AA33;
@@ -9,13 +9,23 @@ button {
     border-radius: 4px;
     border: 2px solid #4a6572;
 }
+button#create-btn { 
+  background-color: #F9AA33;
+  border:  #4a6572;
+  padding: 14px 20px;
+  color: #4a6572;
+}
 
 div#main {
     border-radius: 5px;
     padding: 20px;
     /* display: block; */
-  
-
+    width: 50%;
+    min-width: 400px;
+    text-align: center;
+  }
+  form#new-event {
+    text-align: left;
   }
 
 /* NAV */
@@ -43,11 +53,7 @@ ul.nav {
     background-color: #4a6572;
 
   }
-  
-  /* .active {
-    background-color: #e7ebec;
-    color: #232F34;
-  } */
+
 
 
 
@@ -71,7 +77,7 @@ input[type=text], select {
   input[type=submit] {
     width: 100%;
     /* background-color: #4CAF50; */
-    color: white;
+    color: #4a6572;
     padding: 14px 20px;
     margin: 8px 0;
     border: none;
