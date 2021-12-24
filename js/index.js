@@ -21,6 +21,8 @@ function displayHomeDiv() {
     const createBtn = document.createElement('button') 
     createBtn.addEventListener('click', displayCreateDiv)
     createBtn.textContent = 'Create Event'
+    createBtn.classList.add("btn")
+    createBtn.classList.add("btn-primary")
     mainDiv.append(createBtn)
 }
 
@@ -36,18 +38,29 @@ function displayListDiv(event) {
         .then((response) => response.json())
         .then(createList)
         .catch((error) => console.error(error.message))
-        const list = document.createElement('ul')
+        const list = document.createElement('div')
         list.classList.add("list-group")
         mainDiv.append(list)
     function createList( data) {
         for (let element of data) {
-            const li = document.createElement('li')
-            li.dataset.eventId=element.id
-            li.textContent=element.title
-            li.classList.add("list-group-item")
-            list.append(li)
+            const a = document.createElement('a')
+            a.dataset.eventId=element.id
+            a.textContent=element.title
+            a.href="#"
+            a.classList.add("list-group-item")
+            a.classList.add("list-group-item-action")
+            a.addEventListener('click',getEventData)
+            list.append(a)
         }
     }
+}
+
+function getEventData(event) {
+    fetch('http://localhost:3000/events'+ `/${event.target.dataset.eventId}`,)
+        .then((response) => response.json())
+        .then(displayCurrentDiv)
+        .catch((error) => console.error(error.message))
+
 }
 
 //Functions to handle create Event
@@ -113,6 +126,8 @@ function getNumberOfDays(start, end) {
     const diffInDays = Math.round(diffInTime / oneDay);
     return diffInDays;
 }
+
+
 
 function displayCurrentDiv(data){
     mainDiv.innerHTML = ""
