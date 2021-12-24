@@ -1,10 +1,10 @@
 document.addEventListener('DOMContentLoaded', init)
 function init(event) {
-    displayHomeDiv() 
+    displayHome() 
     const home = document.querySelector('#home')
-    home.addEventListener('click', displayHomeDiv)
+    home.addEventListener('click', displayHome)
     const list = document.querySelector('#event-list')
-    list.addEventListener('click', displayListDiv)
+    list.addEventListener('click', displayList)
     const create = document.querySelector('#create-event')
     create.addEventListener('click', displayCreateDiv)
 
@@ -12,25 +12,22 @@ function init(event) {
 }
 const mainDiv = document.querySelector('#main')
 
-function displayHomeDiv() {
+
+
+
+function displayHome() {
     mainDiv.innerHTML = ''
     mainDiv.innerHTML =
         '<h1>Pick the Dates</h1>' +
         '<p>This web app helps friends to pick the best date to meet.</p>' 
-        // '<button>Create event</button>'
-    const createBtn = document.createElement('button') 
-    createBtn.addEventListener('click', displayCreateDiv)
-    createBtn.textContent = 'Create Event'
-    createBtn.id = "create-btn"
-    createBtn.classList.add("btn")
-    createBtn.classList.add("btn-primary")
-    mainDiv.append(createBtn)
+    const btn = createBtn("create-btn", 'Create Event')
+    btn.addEventListener('click', displayCreateDiv)
+    mainDiv.append(btn)
 }
 
 //Functions to handle Events List
-function displayListDiv(event) {
+function displayList(event) {
     mainDiv.innerHTML = ""
-    
     mainDiv.innerHTML =
         '<h1>Current Events</h1>'
     console.log(event)
@@ -61,7 +58,6 @@ function getEventData(event) {
         .then((response) => response.json())
         .then(displayCurrentDiv)
         .catch((error) => console.error(error.message))
-
 }
 
 //Functions to handle create Event
@@ -109,7 +105,7 @@ function createEvent(event) {
         "end": `${end}`,
         "days": dateRange,
     }
-    
+   
 
     fetch('http://localhost:3000/events',{
         method: "POST",
@@ -124,6 +120,101 @@ function createEvent(event) {
         .catch((error) => console.error(error.message))
 }
 
+
+
+
+function displayCurrentDiv(data){
+    mainDiv.innerHTML = "" 
+    const title = document.createElement('h1')
+    title.textContent = data.title
+    mainDiv.append(title)
+    const summary = document.createElement('div')
+    summary.innerHTML =  '<p>The most popular date for this event:' +
+           '<span>Wednesday, 1/18/2022</span> selected by 5 particpants from 10</p>'
+    mainDiv.append(summary)
+    const btn = createBtn("participate", "Participate")
+    btn.addEventListener('click', openAvailabilityForm)
+    mainDiv.append(btn)
+    console.log('data' , data.days)
+}
+
+function openAvailabilityForm(event) {
+    
+    const form = document.createElement('form')
+    mainDiv.append(form)
+
+    const input = createInput("user-name", "Name")
+    form.append(input)
+    const check  = createCheck('check me')
+    form.append(check)
+
+    const submit = createSubmitBtn()
+    form.append(submit)
+
+
+}
+
+
+// Create Elements functons
+
+function createBtn(btnId, text){
+    const btn = document.createElement('button') 
+    btn.textContent = text
+    btn.id = btnId
+    btn.classList.add("btn")
+    btn.classList.add("btn-primary")
+    return btn
+}
+
+function createCheck(text) {
+    const checkbox = document.createElement('div')
+    checkbox.className = 'form-check'
+
+    const input = document.createElement('input')
+    input.className = "form-check-input"
+    input.type = "checkbox"
+    input.value = ""
+    input.id = "flexCheckChecked"
+    checkbox.append(input)
+
+    const label = document.createElement('label')
+    label.className = "form-check-label"
+    label.for = "flexCheckChecked"
+    label.textContent = text
+    checkbox.append(label)
+    return checkbox
+}
+
+function createInput(inputName, lableText) {
+    const div = document.createElement('div')
+    div.className = "col-12"
+
+    const label = document.createElement('label')
+    label.className = "form-label"
+    label.id = inputName
+    label.textContent = lableText
+    div.append(label)
+
+    const input = document.createElement('input')
+    input.className = "form-control"
+    input.type = "text"
+    input.name = inputName
+    div.append(input)
+    return div
+}
+
+function createSubmitBtn(){
+        const btn =  document.createElement('input')
+        btn.classList.add("btn")
+        btn.classList.add("btn-primary")
+        btn.type = "submit"
+        btn.value="Submit"   
+    // style="background-color: #F9AA33;"
+ return btn
+}
+
+//Aditinal calculations functions
+
 function getNumberOfDays(start, end) {
     const date1 = new Date(start);
     const date2 = new Date(end);
@@ -132,15 +223,3 @@ function getNumberOfDays(start, end) {
     const diffInDays = Math.round(diffInTime / oneDay);
     return diffInDays;
 }
-
-
-
-function displayCurrentDiv(data){
-    mainDiv.innerHTML = ""
-    
-    const title = document.createElement('h1')
-    title.textContent = data.title
-    mainDiv.append(title)
-    console.log(data)
-}
-
