@@ -7,13 +7,9 @@ function init(event) {
     list.addEventListener('click', displayList)
     const create = document.querySelector('#create-event')
     create.addEventListener('click', displayCreateDiv)
-
-
 }
+
 const mainDiv = document.querySelector('#main')
-
-
-
 
 function displayHome() {
     mainDiv.innerHTML = ''
@@ -106,7 +102,6 @@ function createEvent(event) {
         "days": dateRange,
     }
    
-
     fetch('http://localhost:3000/events',{
         method: "POST",
         headers: {
@@ -119,9 +114,6 @@ function createEvent(event) {
         .then(displayCurrentDiv)
         .catch((error) => console.error(error.message))
 }
-
-
-
 
 function displayCurrentDiv(data){
     mainDiv.innerHTML = "" 
@@ -150,13 +142,10 @@ function openAvailabilityForm(event) {
 
     const submit = createSubmitBtn()
     form.append(submit)
-
-
 }
 
 
 // Create Elements functons
-
 function createBtn(btnId, text){
     const btn = document.createElement('button') 
     btn.textContent = text
@@ -214,7 +203,6 @@ function createSubmitBtn(){
 }
 
 //Aditinal calculations functions
-
 function getNumberOfDays(start, end) {
     const date1 = new Date(start);
     const date2 = new Date(end);
@@ -223,3 +211,16 @@ function getNumberOfDays(start, end) {
     const diffInDays = Math.round(diffInTime / oneDay);
     return diffInDays;
 }
+
+// Weather forecast 
+
+fetch("https://aerisweather1.p.rapidapi.com/forecasts/07030?from=2021-12-25&to=2022-01-01", {
+	"method": "GET",
+	"headers": {
+		"x-rapidapi-host": "aerisweather1.p.rapidapi.com",
+		"x-rapidapi-key": "03cbacb2d6msh147d7e91d53a89fp189018jsn4c2e0d1cd811"
+	}
+})
+.then((response) => response.json())
+        .then(data=>console.log(data))
+        .catch((error) => console.error(error.message))

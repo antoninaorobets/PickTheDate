@@ -9,7 +9,8 @@ button {
     border-radius: 4px;
     border: 2px solid #4a6572;
 }
-button#create-btn { 
+button#create-btn,
+button#participate { 
   background-color: #F9AA33;
   border:  #4a6572;
   padding: 14px 20px;
@@ -76,7 +77,7 @@ input[type=text], select {
   }
   input[type=submit] {
     width: 100%;
-    /* background-color: #4CAF50; */
+   background-color: #F9AA33;
     color: #4a6572;
     padding: 14px 20px;
     margin: 8px 0;
