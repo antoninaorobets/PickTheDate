@@ -72,7 +72,7 @@ function displayCreateDiv(event) {
         '<h1>Create New Event</h1>' +
         
         '<form action="#" id="new-event" class="row g-3">' +
-        
+     
         '<div class="col-12">'+
         '<label id="event-name"  class="form-label">Event name</label>' +
         ' <input type="text" name="event-name" class="form-control"/> </div>' +
@@ -84,6 +84,7 @@ function displayCreateDiv(event) {
         ' <input type="date" name="end-data" class="form-control" /> </div>' +
 
         '<input type="submit" value="Submit" class="btn btn-primary" style="background-color: #F9AA33;">' +
+      
         ' </form>'
     const form = document.querySelector('form')
     form.addEventListener('submit',createEvent)
@@ -137,21 +138,42 @@ function displayCurrentDiv(data){
     const btn = createBtn("participate", "Participate")
     btn.addEventListener('click', openAvailabilityForm)
     mainDiv.append(btn)
+    length
     console.log('data' , data.days)
+
+    function openAvailabilityForm(event) {
+        
+        const form = document.createElement('form')
+        form.id = "availabiloty-form"
+        form.addEventListener('submit', updateEventSummary)
+        mainDiv.append(form)
+        const input = createInput("user-name", "Name")
+        form.append(input)
+        const div = document.createElement('div')
+        form.append(div)
+        for (let day of data.days) {
+            const a = new Date(day);
+
+            const check  = createCheck(a.toString().slice(0,15))
+        div.append(check)
+        }
+
+        const submit = createSubmitBtn()
+        form.append(submit)
+    }
 }
 
-function openAvailabilityForm(event) {
-    
-    const form = document.createElement('form')
-    mainDiv.append(form)
+function updateEventSummary(event){
+    event.preventDefault()
 
-    const input = createInput("user-name", "Name")
-    form.append(input)
-    const check  = createCheck('check me')
-    form.append(check)
+    const userName = event.target.querySelector('input[name="user-name"]').value
+    console.log(userName)
 
-    const submit = createSubmitBtn()
-    form.append(submit)
+
+
+    const form = mainDiv.querySelector('#availabiloty-form')
+    mainDiv.removeChild(form)
+    console.log('data saved')
 }
 
 
@@ -179,7 +201,6 @@ function createBtn(btnId, text){
 function createCheck(text) {
     const checkbox = document.createElement('div')
     checkbox.className = 'form-check'
-
     const input = document.createElement('input')
     input.className = "form-check-input"
     input.type = "checkbox"
@@ -255,9 +276,7 @@ function displayWeather(event) {
     function requestWeatherData(event) {
         event.preventDefault()
         mainDiv.removeChild(form)
-    
         const zipcode =event.target.querySelector("input[name='zipcode']").value.toString()
-        
         //convert name to zip??
         requestWeatherAPI(zipcode).then((data)=> {
              console.log(data.response[0].periods[0].maxTempC)
@@ -269,15 +288,29 @@ function displayWeather(event) {
 
 
 function displayForecast(data){
-    const paragraph3 = createParagraph(`Check the weather   ${data.response[0].periods[0].maxTempC}` )
-    mainDiv.append(paragraph3)
+    // const paragraph3 = createParagraph(``)
+    // mainDiv.append(paragraph3)
     const table = document.createElement('table')
     table.className = "table"
     mainDiv.append(table)
+    const thead = document.createElement('thead')
+    table.append(thead)
+    const tbody = document.createElement('tbody')
+    table.append(tbody)
     const tr = document.createElement('tr')
-    table.append(tr)
-    tr.innerHTML = '<th scope="col">#</th><th scope="col">Day</th><th scope="col">Img</th><th scope="col">Max</th> <th scope="col">Min</th>'
+    thead.append(tr)
+    tr.innerHTML = '<th scope="col">Day</th><th scope="col">Img</th><th scope="col">Max</th> <th scope="col">Min</th>'
+    const days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
     for (let day of data.response[0].periods){
+        const tr = document.createElement('tr')
+        tbody.append(tr)
+        const a = new Date(day.timestamp*1000);
+        const dayOfWeek = days[a.getDay()]
+
+        tr.innerHTML = `<td>${dayOfWeek}<br>${a.toString().slice(4,15)}</td><td>${day.weather}</td><td>${day.maxTempC} C</td><td>${day.minTempC} C</td>`
+        // <th scope="row">1</th>
+   
+  
         console.log(day.maxTempC)
     }
 }
@@ -286,7 +319,7 @@ function displayForecast(data){
 function requestWeatherAPI(zipcode) {
     // location, start,end
   
-  return  fetch(`https://aerisweather1.p.rapidapi.com/forecasts/${zipcode}?from=2021-12-25&to=2022-01-01`, {
+  return  fetch(`https://aerisweather1.p.rapidapi.com/forecasts/${zipcode}?from=2021-12-30&to=2022-01-19`, {
         "method": "GET",
         "headers": {
             "x-rapidapi-host": "aerisweather1.p.rapidapi.com",
