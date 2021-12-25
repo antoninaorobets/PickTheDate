@@ -3,6 +3,8 @@ function init(event) {
     displayHome() 
     const home = document.querySelector('#home')
     home.addEventListener('click', displayHome)
+    const weather = document.querySelector('#weather')
+    weather.addEventListener('click', displayWeather)
     const list = document.querySelector('#event-list')
     list.addEventListener('click', displayList)
     const create = document.querySelector('#create-event')
@@ -13,12 +15,20 @@ const mainDiv = document.querySelector('#main')
 
 function displayHome() {
     mainDiv.innerHTML = ''
-    mainDiv.innerHTML =
-        '<h1>Pick the Dates</h1>' +
-        '<p>This web app helps friends to pick the best date to meet.</p>' 
-    const btn = createBtn("create-btn", 'Create Event')
-    btn.addEventListener('click', displayCreateDiv)
-    mainDiv.append(btn)
+    const header = createHeader("h1", "Pick the Day")
+    mainDiv.append(header)
+    const paragraph1 = createParagraph('This web app helps friends to pick the best date to meet.')
+    const paragraph2 = createParagraph("When did you meet your friends last time? Missing them? Don't waste time.  You can select a day that works for all!")
+    const paragraph3 = createParagraph("Check the weather first, not to get wet or cold :)")
+    mainDiv.append(paragraph1)
+    mainDiv.append(paragraph2)
+    mainDiv.append(paragraph3)
+    const weatherBtn = createBtn("weather-btn", 'Check Weather')
+    weatherBtn.addEventListener('click', displayWeather)
+    mainDiv.append(weatherBtn)
+    const eventBtn = createBtn("create-btn", 'Create Event')
+    eventBtn.addEventListener('click', displayCreateDiv)
+    mainDiv.append(eventBtn)
 }
 
 //Functions to handle Events List
@@ -26,7 +36,6 @@ function displayList(event) {
     mainDiv.innerHTML = ""
     mainDiv.innerHTML =
         '<h1>Current Events</h1>'
-    console.log(event)
 
     fetch('http://localhost:3000/events')
         .then((response) => response.json())
@@ -63,6 +72,7 @@ function displayCreateDiv(event) {
         '<h1>Create New Event</h1>' +
         
         '<form action="#" id="new-event" class="row g-3">' +
+        
         '<div class="col-12">'+
         '<label id="event-name"  class="form-label">Event name</label>' +
         ' <input type="text" name="event-name" class="form-control"/> </div>' +
@@ -146,6 +156,17 @@ function openAvailabilityForm(event) {
 
 
 // Create Elements functons
+function createHeader(type,text){
+    const header = document.createElement(`${type}`)
+    header.textContent = text
+    return header
+}
+function createParagraph(text){
+    const paragraph = document.createElement(`p`)
+    paragraph.textContent = text
+    return paragraph
+}
+
 function createBtn(btnId, text){
     const btn = document.createElement('button') 
     btn.textContent = text
@@ -213,14 +234,66 @@ function getNumberOfDays(start, end) {
 }
 
 // Weather forecast 
+function displayWeather(event) {
+    mainDiv.innerHTML = ''
+    const header = createHeader("h1", "Weather Forecast")
+    mainDiv.append(header)
+    const form = document.createElement('form')
+    form.className ="mb-3"
+    form.addEventListener('submit',requestWeatherData)
+    mainDiv.append(form)
+    const input = createInput("zipcode", "City")
+    form.append(input)
+    const submit  = createSubmitBtn()
+    form.append(submit)
 
-fetch("https://aerisweather1.p.rapidapi.com/forecasts/07030?from=2021-12-25&to=2022-01-01", {
-	"method": "GET",
-	"headers": {
-		"x-rapidapi-host": "aerisweather1.p.rapidapi.com",
-		"x-rapidapi-key": "03cbacb2d6msh147d7e91d53a89fp189018jsn4c2e0d1cd811"
-	}
-})
-.then((response) => response.json())
-        .then(data=>console.log(data))
+    // code to ask for location and dates befor request API  
+    // topick for my blog
+    // requestWeatherAPI().then((data)=> {
+    //         console.log(data.response[0].periods[0].maxTempC)
+    //     })
+    function requestWeatherData(event) {
+        event.preventDefault()
+        mainDiv.removeChild(form)
+    
+        const zipcode =event.target.querySelector("input[name='zipcode']").value.toString()
+        
+        //convert name to zip??
+        requestWeatherAPI(zipcode).then((data)=> {
+             console.log(data.response[0].periods[0].maxTempC)
+             displayForecast(data)
+        })
+    
+    }
+}
+
+
+function displayForecast(data){
+    const paragraph3 = createParagraph(`Check the weather   ${data.response[0].periods[0].maxTempC}` )
+    mainDiv.append(paragraph3)
+    const table = document.createElement('table')
+    table.className = "table"
+    mainDiv.append(table)
+    const tr = document.createElement('tr')
+    table.append(tr)
+    tr.innerHTML = '<th scope="col">#</th><th scope="col">Day</th><th scope="col">Img</th><th scope="col">Max</th> <th scope="col">Min</th>'
+    for (let day of data.response[0].periods){
+        console.log(day.maxTempC)
+    }
+}
+
+
+function requestWeatherAPI(zipcode) {
+    // location, start,end
+  
+  return  fetch(`https://aerisweather1.p.rapidapi.com/forecasts/${zipcode}?from=2021-12-25&to=2022-01-01`, {
+        "method": "GET",
+        "headers": {
+            "x-rapidapi-host": "aerisweather1.p.rapidapi.com",
+            "x-rapidapi-key": "03cbacb2d6msh147d7e91d53a89fp189018jsn4c2e0d1cd811"
+        }
+    })
+        .then((response) => response.json())
         .catch((error) => console.error(error.message))
+
+}
