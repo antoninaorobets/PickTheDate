@@ -133,9 +133,15 @@ function displayCurrentEvent(data) {
     const title = document.createElement('h1')
     title.textContent = data.title
     mainDiv.append(title)
+    const summaryByDay = resulrsForEvent(data)
+    const max =  summaryByDay.reduce((x,y) => Math.max(x,y),0)
+    const maxIndex = summaryByDay.indexOf(max)
+    const maxDay = data.days[maxIndex]
+    const total = Object.keys(data.particitants).length
     const summary = document.createElement('div')
+    const day = reternDay(maxDay)
     summary.innerHTML = '<p>The most popular date for this event:' +
-        '<span>Wednesday, 1/18/2022</span> selected by 5 particpants from 10</p>'
+        `<span style="font-weight:bold"> ${day} ${maxDay.slice(5,10)} </span> selected by ${max} from ${total} particpants</p>`
     mainDiv.append(summary)
     const btn = createBtn("participate", "Participate")
     btn.addEventListener('click', (event) => openAvailabilityForm(event, data))
@@ -205,7 +211,7 @@ function displayAvailabilityTable(eventData, section) {
     const tableTitle = createHeader('h4', 'Results')
     section.append(tableTitle)
     const table = document.createElement('table')
-    table.classList.add( "table")
+    table.classList.add("table")
     table.classList.add("table-bordered")
     section.append(table)
 
@@ -220,10 +226,11 @@ function displayAvailabilityTable(eventData, section) {
     th.textContent = ''
     tr.append(th)
     for (let i = 1; i < numCol + 1; i++) {
-        const d = new Date(eventData.days[i - 1])
+        const day = reternDay(eventData.days[i - 1])
+        const d = eventData.days[i - 1]
         const th = document.createElement('th')
         th.scope = "col"
-        th.textContent = d.toString().slice(8, 13).replace(' ', '/')
+        th.textContent = `${day} \n `   +   d.toString().slice(5, 10).replace(' ', '/')
         tr.append(th)
     }
     const thBtn = document.createElement('th')
@@ -232,46 +239,59 @@ function displayAvailabilityTable(eventData, section) {
     tr.append(thBtn)
 
 
-// availability
+    // availability
     const tbody = document.createElement('tbody')
     table.append(tbody)
     const particitants = Object.keys(eventData.particitants)
     const numRow = particitants.length
     const avail = Object.values(eventData.particitants)
-    
-    for (let i = 0; i < numRow ; i++) {
-   // for (let i = numRow-1; i >= 0 ; i--) {
+
+    for (let i = 0; i < numRow; i++) {
+        // for (let i = numRow-1; i >= 0 ; i--) {
         const tr = document.createElement('tr')
         tbody.append(tr)
         const td = document.createElement('td')
         tr.append(td)
         td.scope = "row"
         td.textContent = particitants[i]
-        
+
         for (let j = 0; j < numCol; j++) {
             const td = document.createElement('td')
             if (avail[i][j]) {
                 td.style.backgroundColor = "#F9AA33";
             }
-           // td.textContent = avail[i][j]
+            // td.textContent = avail[i][j]
             tr.append(td)
         }
         const tdBtn = document.createElement('td')
         tdBtn.append(document.createElement('button'))
-        tdBtn.innerText="Edit"
-        tdBtn.addEventListener('click', (event)=>editUserRecord(event,particitants[i]) )
+        tdBtn.innerText = "Edit"
+        tdBtn.addEventListener('click', (event) => editUserRecord(event, particitants[i]))
         tr.append(tdBtn)
     }
 
     // summry
-    // resulrsForEvent(eventData)
+    
 }
 
-// function resulrsForEvent(eventData){
+function resulrsForEvent(eventData) {
+    const avail = Object.values(eventData.particitants)
+    const numCol = eventData.days.length
+    const numRow = Object.keys(eventData.particitants).length
 
-// }
+    const resArr = []
+    for (let j = 0; j < numCol; j++) {
+        let count = 0
+        for (let i = 0; i < numRow; i++) {
+            const td = document.createElement('td')
+            if (avail[i][j]) { count++ }
+        }
+        resArr.push(count)
+    }
+    return resArr
+}
 
-function editUserRecord(event,particitants) {
+function editUserRecord(event, particitants) {
     console.log(particitants)
 }
 
@@ -406,11 +426,14 @@ function displayForecast(data) {
         const dayOfWeek = days[a.getDay()]
 
         tr.innerHTML = `<td>${dayOfWeek}<br>${a.toString().slice(4, 15)}</td><td>${day.weather}</td><td>${day.maxTempC} C</td><td>${day.minTempC} C</td>`
-        // <th scope="row">1</th>
-
-
-        console.log(day.maxTempC)
+       console.log(day.maxTempC)
     }
+}
+
+function reternDay(day){
+    const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+    const a = new Date(day);
+     return days[a.getDay()]
 }
 
 
