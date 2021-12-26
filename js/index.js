@@ -111,6 +111,7 @@ function createEvent(event) {
         "start": `${start}`,
         "end": `${end}`,
         "days": dateRange,
+        "participants": {}
     }
 
     fetch('http://localhost:3000/events', {
@@ -139,22 +140,22 @@ function displayCurrentEvent(data) {
     const btn = createBtn("participate", "Participate")
     btn.addEventListener('click', (event) => openAvailabilityForm(event, data))
     mainDiv.append(btn)
-    
+
     const form = document.createElement('form')
     form.id = "availabiloty-form"
     mainDiv.append(form)
-    
+
     const visualSection = document.createElement('section')
     mainDiv.append(visualSection)
-    if ( Object.keys(data.particitants).length === 0 ) {
-    visualSection.textContent = 'Tut budet tablichka' 
+    if (Object.keys(data.particitants).length === 0) {
+        visualSection.textContent = 'Tut budet tablichka'
     }
     else {
-        displayAvailabilityTable(data,visualSection)
+        displayAvailabilityTable(data, visualSection)
     }
 }
 
-function openAvailabilityForm(event, eventData){
+function openAvailabilityForm(event, eventData) {
     const form = mainDiv.querySelector('#availabiloty-form')
     form.addEventListener('submit', (event) => updateEventSummary(event, eventData))  //doean't work if move to displayCurrentEvent function
     const input = createInput("user-name", "Name")
@@ -204,37 +205,75 @@ function displayAvailabilityTable(eventData, section) {
     const tableTitle = createHeader('h4', 'Results')
     section.append(tableTitle)
     const table = document.createElement('table')
-    table.className = "table"
+    table.classList.add( "table")
+    table.classList.add("table-bordered")
     section.append(table)
-    const thead = document.createElement('thead')
-    table.append(thead)
+
+    // dates
+    const dates = document.createElement('tfoot')
+    table.append(dates)
     const tr = document.createElement('tr')
-    thead.append(tr)
-
-    const numCol = eventData.days.length + 1 
+    dates.append(tr)
+    const numCol = eventData.days.length
     const th = document.createElement('th')
-        th.scope ="col"
-        th.textContent = 'Paricipants'
-        tr.append(th)
-    for (let i = 1; i< numCol; i++ ) {
-        const d = new Date (eventData.days[i-1])
+    th.scope = "col"
+    th.textContent = ''
+    tr.append(th)
+    for (let i = 1; i < numCol + 1; i++) {
+        const d = new Date(eventData.days[i - 1])
         const th = document.createElement('th')
-        th.scope ="col"
-        th.textContent = d.toString().slice(8,13).replace(' ', '/')
+        th.scope = "col"
+        th.textContent = d.toString().slice(8, 13).replace(' ', '/')
         tr.append(th)
-    // const thBtn = document.createElement('th')
-    // thBtn.scope ="col"
-    // thBtn.textContent = ''
-    // tr.append(thBtn)
+    }
+    const thBtn = document.createElement('th')
+    thBtn.scope = "col"
+    thBtn.textContent = ''
+    tr.append(thBtn)
 
+
+// availability
+    const tbody = document.createElement('tbody')
+    table.append(tbody)
+    const particitants = Object.keys(eventData.particitants)
+    const numRow = particitants.length
+    const avail = Object.values(eventData.particitants)
+    
+    for (let i = 0; i < numRow ; i++) {
+   // for (let i = numRow-1; i >= 0 ; i--) {
+        const tr = document.createElement('tr')
+        tbody.append(tr)
+        const td = document.createElement('td')
+        tr.append(td)
+        td.scope = "row"
+        td.textContent = particitants[i]
+        
+        for (let j = 0; j < numCol; j++) {
+            const td = document.createElement('td')
+            if (avail[i][j]) {
+                td.style.backgroundColor = "#F9AA33";
+            }
+           // td.textContent = avail[i][j]
+            tr.append(td)
+        }
+        const tdBtn = document.createElement('td')
+        tdBtn.append(document.createElement('button'))
+        tdBtn.innerText="Edit"
+        tdBtn.addEventListener('click', (event)=>editUserRecord(event,particitants[i]) )
+        tr.append(tdBtn)
     }
 
-
-    const tbody = document.createElement('tbody')
-    teble.append(tbody)
-
+    // summry
+    // resulrsForEvent(eventData)
 }
 
+// function resulrsForEvent(eventData){
+
+// }
+
+function editUserRecord(event,particitants) {
+    console.log(particitants)
+}
 
 // Create Elements functons
 function createHeader(type, text) {
