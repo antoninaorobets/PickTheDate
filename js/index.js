@@ -124,7 +124,7 @@ function createEvent(event) {
     })
         .then((response) => response.json())
         .then(displayCurrentEvent)
-        .catch((error) => console.error(error.message))
+        .catch((error) => console.error(error))
 }
 
 function displayCurrentEvent(data) {
@@ -133,16 +133,18 @@ function displayCurrentEvent(data) {
     const title = document.createElement('h1')
     title.textContent = data.title
     mainDiv.append(title)
+    if (data.participants) {
     const summaryByDay = resulrsForEvent(data)
     const max =  summaryByDay.reduce((x,y) => Math.max(x,y),0)
     const maxIndex = summaryByDay.indexOf(max)
     const maxDay = data.days[maxIndex]
-    const total = Object.keys(data.particitants).length
+    const total = Object.keys(data.participants).length
     const summary = document.createElement('div')
     const day = reternDay(maxDay)
     summary.innerHTML = '<p>The most popular date for this event:' +
         `<span style="font-weight:bold"> ${day} ${maxDay.slice(5,10)} </span> selected by ${max} from ${total} particpants</p>`
     mainDiv.append(summary)
+    }
     const btn = createBtn("participate", "Participate")
     btn.addEventListener('click', (event) => openAvailabilityForm(event, data))
     mainDiv.append(btn)
@@ -153,11 +155,12 @@ function displayCurrentEvent(data) {
 
     const visualSection = document.createElement('section')
     mainDiv.append(visualSection)
-    if (Object.keys(data.particitants).length === 0) {
-        visualSection.textContent = 'Tut budet tablichka'
+    if (data.participants) {
+        displayAvailabilityTable(data, visualSection)
     }
     else {
-        displayAvailabilityTable(data, visualSection)
+        visualSection.textContent = 'Tut budet tablichka'
+       
     }
 }
 
@@ -187,13 +190,17 @@ function updateEventSummary(event, eventData) {
     mainDiv.removeChild(form)
     const id = eventData.id
 
-    eventData.particitants[userName] = availability
-    console.log(eventData.particitants)
+  
+    // console.log(availability)
+    // eventData.participants = {
+    //     [userName] : availability
+    // }
+ eventData.participants[userName] = availability
     const data = {
-        particitants: eventData.particitants
+        participants: eventData.participants
     }
     // ?????????? How to ubpage without passin all object
-    fetch('http://localhost:3000/events' + `/${id}`, {
+    fetch(`http://localhost:3000/events/${id}`, {
         method: "PATCH",
         headers: {
             "Content-Type": "application/json",
@@ -207,7 +214,6 @@ function updateEventSummary(event, eventData) {
 }
 
 function displayAvailabilityTable(eventData, section) {
-    console.log('displayAvailabilityTable')
     const tableTitle = createHeader('h4', 'Results')
     section.append(tableTitle)
     const table = document.createElement('table')
@@ -216,7 +222,7 @@ function displayAvailabilityTable(eventData, section) {
     section.append(table)
 
     // dates
-    const dates = document.createElement('tfoot')
+    const dates = document.createElement('thead')
     table.append(dates)
     const tr = document.createElement('tr')
     dates.append(tr)
@@ -230,7 +236,7 @@ function displayAvailabilityTable(eventData, section) {
         const d = eventData.days[i - 1]
         const th = document.createElement('th')
         th.scope = "col"
-        th.textContent = `${day} \n `   +   d.toString().slice(5, 10).replace(' ', '/')
+        th.textContent = day.slice(0,3) + ' ' + d.toString().slice(5, 10).replace('-', '/')
         tr.append(th)
     }
     const thBtn = document.createElement('th')
@@ -242,9 +248,9 @@ function displayAvailabilityTable(eventData, section) {
     // availability
     const tbody = document.createElement('tbody')
     table.append(tbody)
-    const particitants = Object.keys(eventData.particitants)
-    const numRow = particitants.length
-    const avail = Object.values(eventData.particitants)
+    const participants = Object.keys(eventData.participants)
+    const numRow = participants.length
+    const avail = Object.values(eventData.participants)
 
     for (let i = 0; i < numRow; i++) {
         // for (let i = numRow-1; i >= 0 ; i--) {
@@ -253,7 +259,7 @@ function displayAvailabilityTable(eventData, section) {
         const td = document.createElement('td')
         tr.append(td)
         td.scope = "row"
-        td.textContent = particitants[i]
+        td.textContent = participants[i]
 
         for (let j = 0; j < numCol; j++) {
             const td = document.createElement('td')
@@ -266,18 +272,49 @@ function displayAvailabilityTable(eventData, section) {
         const tdBtn = document.createElement('td')
         tdBtn.append(document.createElement('button'))
         tdBtn.innerText = "Edit"
-        tdBtn.addEventListener('click', (event) => editUserRecord(event, particitants[i]))
+        tdBtn.addEventListener('click', (event) => editUserRecord(event, participants[i]))
         tr.append(tdBtn)
     }
 
     // summry
-    
+    // //   `<span style="font-weight:bold"> ${day} ${maxDay.slice(5,10)} </span> selected by ${max} from ${total} particpants</p>`
+     const summaryByDay = resulrsForEvent(eventData)
+    const max =  summaryByDay.reduce((x,y) => Math.max(x,y),0)
+    const sum = createTablFooter(summaryByDay, 'tfoot')
+    table.append(sum)
+
+}
+
+
+
+function createTablFooter(arr, param){
+    const numCol = arr.length
+    const sum = document.createElement(param)
+    const tr = document.createElement('tr')
+    sum.append(tr)
+  
+    const th = document.createElement('th')
+    th.scope = "col"
+    th.textContent = ''
+    tr.append(th)
+    for (let i = 0; i < numCol; i++) {
+        const th = document.createElement('th')
+        th.scope = "col"
+        th.textContent = arr[i]
+        tr.append(th)
+    }
+    const thBtn = document.createElement('th')
+    thBtn.scope = "col"
+    thBtn.textContent = ''
+    tr.append(thBtn)
+
+    return sum
 }
 
 function resulrsForEvent(eventData) {
-    const avail = Object.values(eventData.particitants)
+    const avail = Object.values(eventData.participants)
     const numCol = eventData.days.length
-    const numRow = Object.keys(eventData.particitants).length
+    const numRow = Object.keys(eventData.participants).length
 
     const resArr = []
     for (let j = 0; j < numCol; j++) {
@@ -291,8 +328,8 @@ function resulrsForEvent(eventData) {
     return resArr
 }
 
-function editUserRecord(event, particitants) {
-    console.log(particitants)
+function editUserRecord(event, participants) {
+    console.log(participants)
 }
 
 // Create Elements functons
