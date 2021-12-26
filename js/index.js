@@ -138,18 +138,20 @@ function displayCurrentDiv(data){
     const btn = createBtn("participate", "Participate")
     btn.addEventListener('click', openAvailabilityForm)
     mainDiv.append(btn)
-    length
-    console.log('data' , data.days)
+
+    console.log('data' , data)
 
     function openAvailabilityForm(event) {
         
         const form = document.createElement('form')
         form.id = "availabiloty-form"
-        form.addEventListener('submit', updateEventSummary)
+       // form.dataset.eventId = data.id
+        form.addEventListener('submit',  (event) => updateEventSummary(event,data))
         mainDiv.append(form)
         const input = createInput("user-name", "Name")
         form.append(input)
         const div = document.createElement('div')
+       // div.id = "check-list"
         form.append(div)
         for (let day of data.days) {
             const a = new Date(day);
@@ -163,17 +165,40 @@ function displayCurrentDiv(data){
     }
 }
 
-function updateEventSummary(event){
+function updateEventSummary(event, eventData){
     event.preventDefault()
-
     const userName = event.target.querySelector('input[name="user-name"]').value
-    console.log(userName)
-
-
-
+    const checkList =event.target.querySelectorAll(".form-check")
+    const availability = []
+    checkList.forEach(check => availability.push(check.querySelector('input').checked))
     const form = mainDiv.querySelector('#availabiloty-form')
     mainDiv.removeChild(form)
-    console.log('data saved')
+    const id = eventData.id
+
+    
+    let obj ={}
+    obj[userName] = availability
+
+    eventData.particitants[userName] = availability
+    console.log(eventData.particitants)
+    const data = { 
+        particitants: eventData.particitants
+    }
+
+
+
+
+    fetch('http://localhost:3000/events' + `/${id}`,{
+        method: "PATCH",
+        headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+        },
+        body: JSON.stringify(data),
+    })
+        .then((response) => response.json())
+        .then(displayCurrentDiv)
+        .catch((error) => console.error(error.message))
 }
 
 
