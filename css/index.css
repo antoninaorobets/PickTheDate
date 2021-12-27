@@ -1,6 +1,6 @@
 body {
     margin: 0;
-    color: #232F34;
+    color: #344955;
     /* background-color:#f2f2f2; */
 }
 /* button { 
@@ -18,6 +18,17 @@ button#participate
   color: #4a6572;
   margin: 20px;
 }
+button#create-btn:hover,
+button#weather-btn:hover,
+button#participate:hover {
+  background-color: #4a6572;
+  color: white;
+
+}
+h1{
+  margin: 40px;
+}
+
 
 div#main {
     border-radius: 5px;
@@ -27,9 +38,7 @@ div#main {
     min-width: 400px;
     text-align: center;
   }
-  form {
-    text-align: left;
-  }
+  
 
 /* NAV */
 ul.nav {
@@ -52,26 +61,40 @@ ul.nav {
     text-decoration: none;
   }
   
-  li.nav a:hover {
+  li.nav:hover {
     background-color: #4a6572;
     color: white;
-
   }
 
 
 /* Table */
-table {
-  padding: 40px;
+section {
+  margin-top: 20px;
+
+}
+div.list-group a:hover {
+  background-color: #F9AA33;
 }
 
 
+/* table {
+ 
+} */
+
 
 /* Form */
+form {
+  text-align: left;
+  padding: 30px;
+  border: 1px solid #ccc;
+  border-radius: 4px;  
+  line-height: 1; 
+}
 
 input[type=text], select {
     width: 100%;
     padding: 12px 20px;
-    margin: 8px 0;
+    margin: 8px 0px;
     display: inline-block;
     border: 1px solid #ccc;
     border-radius: 4px;
@@ -80,19 +103,30 @@ input[type=text], select {
   input[type=text]:focus {
     border: 3px solid #4a6572;
   }
+  input[type=date] {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0px;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+  }
   input[type=submit] {
     width: 100%;
    background-color: #F9AA33;
     color: #4a6572;
     padding: 14px 20px;
-    margin: 8px 0;
+    margin: 8px 0px;
     border: none;
     border-radius: 4px;
     cursor: pointer;
   }
   
-  /* input[type=submit]:hover {
-   background-color: #45a049; 
-  } */
+  input[type=submit]:hover {
+      background-color: #4a6572;
+      color: white;
+    
+  }
   
   
