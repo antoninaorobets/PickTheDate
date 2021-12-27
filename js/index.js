@@ -57,13 +57,15 @@ function displayList(event) {
         }
     }
 }
-
+// Fetch functions
 function getEventData(event) {
     fetch('http://localhost:3000/events' + `/${event.target.dataset.eventId}`,)
         .then((response) => response.json())
         .then(displayCurrentEvent)
         .catch((error) => console.error(error.message))
 }
+
+
 
 //Functions to handle create Event
 function displayCreateDiv(event) {
@@ -90,22 +92,38 @@ function displayCreateDiv(event) {
     form.addEventListener('submit', createEvent)
 }
 
-function createEvent(event) {
-    event.preventDefault()
-    const input = event.target.querySelector("input[name='event-name']").value
-    let start = event.target.querySelector("input[name='start-data']").value
-    const end = event.target.querySelector("input[name='end-data']").value
-    const interval = getNumberOfDays(start, end)
-    const dateRange = [start]
-
+function calculateIntervalDates(startDate, endDate){  
+    const date1 = new Date(startDate);
+    const date2 = new Date(endDate);
+    const oneDay = 1000 * 60 * 60 * 24;
+    const diffInTime = date2.getTime() - date1.getTime();
+    const interval = Math.round(diffInTime / oneDay);
+    let start = startDate
+    const startDay = new Date(start)
+    const dateRange = [startDay.toString().slice(0,10)]
     for (let i = 0; i < interval; i++) {
         let d = new Date(start)
-        d.setDate(d.getDate() + 1)
-        dateRange.push(d)
+        d.setDate(d.getDate() + 1)   
+        dateRange.push(d.toString().slice(0,10))
         start = d
         console.log(d)
     }
-    console.log(dateRange)
+    return dateRange
+}
+
+function reternDay(day){
+    const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+    const a = new Date(day);
+     return days[a.getDay()]
+}
+
+
+function createEvent(event) {
+    event.preventDefault()
+    const input = event.target.querySelector("input[name='event-name']").value
+    const start = event.target.querySelector("input[name='start-data']").value
+    const end = event.target.querySelector("input[name='end-data']").value
+    const dateRange = calculateIntervalDates(start, end)
     const formData = {
         "title": `${input}`,
         "start": `${start}`,
@@ -113,7 +131,7 @@ function createEvent(event) {
         "days": dateRange,
         "participants": {}
     }
-
+ 
     fetch('http://localhost:3000/events', {
         method: "POST",
         headers: {
@@ -127,13 +145,14 @@ function createEvent(event) {
         .catch((error) => console.error(error))
 }
 
+
 function displayCurrentEvent(data) {
     console.log('current event data', data)
     mainDiv.innerHTML = ""
     const title = document.createElement('h1')
     title.textContent = data.title
     mainDiv.append(title)
-    if (data.participants) {
+    if (Object.keys(data.participants).length !== 0) {
     const summaryByDay = resulrsForEvent(data)
     const max =  summaryByDay.reduce((x,y) => Math.max(x,y),0)
     const maxIndex = summaryByDay.indexOf(max)
@@ -142,7 +161,7 @@ function displayCurrentEvent(data) {
     const summary = document.createElement('div')
     const day = reternDay(maxDay)
     summary.innerHTML = '<p>The most popular date for this event:' +
-        `<span style="font-weight:bold"> ${day} ${maxDay.slice(5,10)} </span> selected by ${max} from ${total} particpants</p>`
+        `<span style="font-weight:bold"> ${day} ${maxDay.slice(4,10)} </span> selected by ${max} from ${total} particpants</p>`
     mainDiv.append(summary)
     }
     const btn = createBtn("participate", "Participate")
@@ -155,12 +174,12 @@ function displayCurrentEvent(data) {
 
     const visualSection = document.createElement('section')
     mainDiv.append(visualSection)
-    if (data.participants) {
-        displayAvailabilityTable(data, visualSection)
+    if (Object.keys(data.participants).length === 0) {
+        visualSection.textContent = 'Tut budet tablichka'
+        
     }
     else {
-        visualSection.textContent = 'Tut budet tablichka'
-       
+        displayAvailabilityTable(data, visualSection)
     }
 }
 
@@ -172,8 +191,7 @@ function openAvailabilityForm(event, eventData) {
     const div = document.createElement('div')
     form.append(div)
     for (let day of eventData.days) {
-        const a = new Date(day);
-        const check = createCheck(a.toString().slice(0, 15))
+        const check = createCheck(day)
         div.append(check)
     }
     const submit = createSubmitBtn()
@@ -190,11 +208,6 @@ function updateEventSummary(event, eventData) {
     mainDiv.removeChild(form)
     const id = eventData.id
 
-  
-    // console.log(availability)
-    // eventData.participants = {
-    //     [userName] : availability
-    // }
  eventData.participants[userName] = availability
     const data = {
         participants: eventData.participants
@@ -232,11 +245,9 @@ function displayAvailabilityTable(eventData, section) {
     th.textContent = ''
     tr.append(th)
     for (let i = 1; i < numCol + 1; i++) {
-        const day = reternDay(eventData.days[i - 1])
-        const d = eventData.days[i - 1]
         const th = document.createElement('th')
         th.scope = "col"
-        th.textContent = day.slice(0,3) + ' ' + d.toString().slice(5, 10).replace('-', '/')
+        th.textContent = eventData.days[i - 1]
         tr.append(th)
     }
     const thBtn = document.createElement('th')
@@ -399,15 +410,7 @@ function createSubmitBtn() {
     return btn
 }
 
-//Aditinal calculations functions
-function getNumberOfDays(start, end) {
-    const date1 = new Date(start);
-    const date2 = new Date(end);
-    const oneDay = 1000 * 60 * 60 * 24;
-    const diffInTime = date2.getTime() - date1.getTime();
-    const diffInDays = Math.round(diffInTime / oneDay);
-    return diffInDays;
-}
+
 
 // Weather forecast 
 function displayWeather(event) {
@@ -467,11 +470,6 @@ function displayForecast(data) {
     }
 }
 
-function reternDay(day){
-    const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-    const a = new Date(day);
-     return days[a.getDay()]
-}
 
 
 function requestWeatherAPI(zipcode) {
