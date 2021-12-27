@@ -11,39 +11,37 @@ function init(event) {
     create.addEventListener('click', displayCreateDiv)
 }
 
-const mainDiv = document.querySelector('#main')
+const mainDiv = () => document.querySelector('#main')
 
 function displayHome() {
-    mainDiv.innerHTML = ''
+    mainDiv().innerHTML = ''
     const header = createHeader("h1", "Pick the Day")
-    mainDiv.append(header)
+    mainDiv().append(header)
     const paragraph1 = createParagraph('This web app helps friends to pick the best date to meet.')
     const paragraph2 = createParagraph("When did you meet your friends last time? Missing them? Don't waste time.  You can select a day that works for all!")
     const paragraph3 = createParagraph("Check the weather first, not to get wet or cold :)")
-    mainDiv.append(paragraph1)
-    mainDiv.append(paragraph2)
-    mainDiv.append(paragraph3)
+    mainDiv().append(paragraph1)
+    mainDiv().append(paragraph2)
+    mainDiv().append(paragraph3)
     const weatherBtn = createBtn("weather-btn", 'Check Weather')
     weatherBtn.addEventListener('click', displayWeather)
-    mainDiv.append(weatherBtn)
+    mainDiv().append(weatherBtn)
     const eventBtn = createBtn("create-btn", 'Create Event')
     eventBtn.addEventListener('click', displayCreateDiv)
-    mainDiv.append(eventBtn)
+    mainDiv().append(eventBtn)
 }
 
 //Functions to handle Events List
 function displayList(event) {
-    mainDiv.innerHTML = ""
-    mainDiv.innerHTML =
-        '<h1>Current Events</h1>'
+    mainDiv().innerHTML = ""
+    mainDiv().append(createHeader('h1','Current Event'))
 
     fetch('http://localhost:3000/events')
         .then((response) => response.json())
         .then(createList)
         .catch((error) => console.error(error.message))
-    const list = document.createElement('div')
-    list.classList.add("list-group")
-    mainDiv.append(list)
+    const list = createDiv("list-group")
+    mainDiv().append(list)
     function createList(data) {
         for (let element of data) {
             const a = document.createElement('a')
@@ -69,27 +67,21 @@ function getEventData(event) {
 
 //Functions to handle create Event
 function displayCreateDiv(event) {
-    mainDiv.innerHTML = ""
-    mainDiv.innerHTML =
-        '<h1>Create New Event</h1>' +
-
-        '<form action="#" id="new-event" class="row g-3">' +
-
-        '<div class="col-12">' +
-        '<label id="event-name"  class="form-label">Event name</label>' +
-        ' <input type="text" name="event-name" class="form-control"/> </div>' +
-        ' <div class="col-md-6">' +
-        ' <label id="start-data"   class="form-label">From date</label>' +
-        '<input type="date" name="start-data"  class="form-control"/> </div>' +
-        ' <div class="col-md-6">' +
-        ' <label id="start-data"  class="form-label">Till date</label>' +
-        ' <input type="date" name="end-data" class="form-control" /> </div>' +
-
-        '<input type="submit" value="Submit" class="btn btn-primary" style="background-color: #F9AA33;">' +
-
-        ' </form>'
-    const form = document.querySelector('form')
+    mainDiv().innerHTML = ""
+    const h1 = createHeader('h1', "Create New Event")
+    mainDiv().append(h1)
+    const form = createForm ("new-event", "row g-3")
     form.addEventListener('submit', createEvent)
+    mainDiv().append(form)
+    const formName = createInput("col-md-12", "text", "event-name", 'Event name')
+    const formStart = createInput("col-md-6", "date", "start-data", "From date")
+    const formEnd = createInput("col-md-6", "date", "end-data", "Till date")
+
+    const submit = createSubmitBtn()
+    form.appendChild(formName)
+    form.appendChild(formStart)
+    form.appendChild(formEnd)
+    form.appendChild(submit)
 }
 
 function calculateIntervalDates(startDate, endDate){  
@@ -100,18 +92,18 @@ function calculateIntervalDates(startDate, endDate){
     const interval = Math.round(diffInTime / oneDay);
     let start = startDate
     const startDay = new Date(start)
-    const dateRange = [startDay.toString().slice(0,10)]
+    const dateRange = [startDay.toString().slice(0,15)]
     for (let i = 0; i < interval; i++) {
         let d = new Date(start)
         d.setDate(d.getDate() + 1)   
-        dateRange.push(d.toString().slice(0,10))
+        dateRange.push(d.toString().slice(0,15))
         start = d
         console.log(d)
     }
     return dateRange
 }
 
-function reternDay(day){
+function reternDayOfWeek(day){
     const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
     const a = new Date(day);
      return days[a.getDay()]
@@ -131,7 +123,6 @@ function createEvent(event) {
         "days": dateRange,
         "participants": {}
     }
- 
     fetch('http://localhost:3000/events', {
         method: "POST",
         headers: {
@@ -148,45 +139,45 @@ function createEvent(event) {
 
 function displayCurrentEvent(data) {
     console.log('current event data', data)
-    mainDiv.innerHTML = ""
-    const title = document.createElement('h1')
-    title.textContent = data.title
-    mainDiv.append(title)
+    mainDiv().innerHTML = ""
+    const title = createHeader('h1',data.title)
+    mainDiv().append(title)
     if (Object.keys(data.participants).length !== 0) {
-    const summaryByDay = resulrsForEvent(data)
-    const max =  summaryByDay.reduce((x,y) => Math.max(x,y),0)
-    const maxIndex = summaryByDay.indexOf(max)
-    const maxDay = data.days[maxIndex]
-    const total = Object.keys(data.participants).length
-    const summary = document.createElement('div')
-    const day = reternDay(maxDay)
-    summary.innerHTML = '<p>The most popular date for this event:' +
-        `<span style="font-weight:bold"> ${day} ${maxDay.slice(4,10)} </span> selected by ${max} from ${total} particpants</p>`
-    mainDiv.append(summary)
+        const summaryByDay = summaryParticipantsByDay(data)
+        const MaxPtc = summaryByDay.reduce((x, y) => Math.max(x, y), 0)
+        const indexDayWithMaxPtc = summaryByDay.indexOf(MaxPtc)
+        const dayMaxPtc = data.days[indexDayWithMaxPtc]
+        const totalPtc = Object.keys(data.participants).length
+        const summaryDiv = document.createElement('div')
+        const dayOfWeek = reternDayOfWeek(dayMaxPtc)
+        summaryDiv.innerHTML = '<p>The most popular date for this event: ' +
+            `<span style="font-weight:bold">${dayOfWeek} ${dayMaxPtc.slice(4, 10)}</span><br> selected by ${MaxPtc} from ${totalPtc} particpants</p>`
+        mainDiv().append(summaryDiv)
     }
     const btn = createBtn("participate", "Participate")
     btn.addEventListener('click', (event) => openAvailabilityForm(event, data))
-    mainDiv.append(btn)
+    mainDiv().append(btn)
 
-    const form = document.createElement('form')
-    form.id = "availabiloty-form"
-    mainDiv.append(form)
-
-    const visualSection = document.createElement('section')
-    mainDiv.append(visualSection)
+    const tableSaction = document.createElement('section')
+    mainDiv().append(tableSaction)
     if (Object.keys(data.participants).length === 0) {
-        visualSection.textContent = 'Tut budet tablichka'
-        
+        tableSaction.textContent = 'Tut budet tablichka'
     }
     else {
-        displayAvailabilityTable(data, visualSection)
+        displayAvailabilityTable(data, tableSaction)
     }
 }
 
 function openAvailabilityForm(event, eventData) {
-    const form = mainDiv.querySelector('#availabiloty-form')
+    const ptcBtn = mainDiv().querySelector("#participate")
+    mainDiv().removeChild(ptcBtn)
+    const tableSaction =mainDiv().querySelector('section')
+    mainDiv().removeChild(tableSaction)
+   // const form = mainDiv().querySelector('#availability-form')
+   const form = createForm('availability-form',"mb-3")
+   mainDiv().append(form)
     form.addEventListener('submit', (event) => updateEventSummary(event, eventData))  //doean't work if move to displayCurrentEvent function
-    const input = createInput("user-name", "Name")
+    const input = createInput("col-md-6","text","user-name", "Name")
     form.append(input)
     const div = document.createElement('div')
     form.append(div)
@@ -204,15 +195,15 @@ function updateEventSummary(event, eventData) {
     const checkList = event.target.querySelectorAll(".form-check")
     const availability = []
     checkList.forEach(check => availability.push(check.querySelector('input').checked))
-    const form = mainDiv.querySelector('#availabiloty-form')
-    mainDiv.removeChild(form)
+    const form = mainDiv().querySelector('#availability-form')
+    mainDiv().removeChild(form)
     const id = eventData.id
 
  eventData.participants[userName] = availability
     const data = {
         participants: eventData.participants
     }
-    // ?????????? How to ubpage without passin all object
+    // ? How to ubpage without passin all object
     fetch(`http://localhost:3000/events/${id}`, {
         method: "PATCH",
         headers: {
@@ -234,76 +225,44 @@ function displayAvailabilityTable(eventData, section) {
     table.classList.add("table-bordered")
     section.append(table)
 
-    // dates
-    const dates = document.createElement('thead')
+    const dates = createTablFooter(eventData.days, 'thead')
     table.append(dates)
-    const tr = document.createElement('tr')
-    dates.append(tr)
-    const numCol = eventData.days.length
-    const th = document.createElement('th')
-    th.scope = "col"
-    th.textContent = ''
-    tr.append(th)
-    for (let i = 1; i < numCol + 1; i++) {
-        const th = document.createElement('th')
-        th.scope = "col"
-        th.textContent = eventData.days[i - 1]
-        tr.append(th)
-    }
-    const thBtn = document.createElement('th')
-    thBtn.scope = "col"
-    thBtn.textContent = ''
-    tr.append(thBtn)
-
-
     // availability
     const tbody = document.createElement('tbody')
     table.append(tbody)
     const participants = Object.keys(eventData.participants)
-    const numRow = participants.length
-    const avail = Object.values(eventData.participants)
-
-    for (let i = 0; i < numRow; i++) {
-        // for (let i = numRow-1; i >= 0 ; i--) {
+    for (let i = 0; i < participants.length; i++) {
+        // for (let i = participants.length-1; i >= 0 ; i--) {
         const tr = document.createElement('tr')
         tbody.append(tr)
         const td = document.createElement('td')
         tr.append(td)
         td.scope = "row"
         td.textContent = participants[i]
-
-        for (let j = 0; j < numCol; j++) {
+        for (let j = 0; j < eventData.days.length; j++) {
             const td = document.createElement('td')
-            if (avail[i][j]) {
+            if (Object.values(eventData.participants)[i][j]) {
                 td.style.backgroundColor = "#F9AA33";
             }
-            // td.textContent = avail[i][j]
             tr.append(td)
         }
         const tdBtn = document.createElement('td')
         tdBtn.append(document.createElement('button'))
-        tdBtn.innerText = "Edit"
+        tdBtn.innerText = "Remove"
         tdBtn.addEventListener('click', (event) => editUserRecord(event, participants[i]))
         tr.append(tdBtn)
     }
-
-    // summry
-    // //   `<span style="font-weight:bold"> ${day} ${maxDay.slice(5,10)} </span> selected by ${max} from ${total} particpants</p>`
-     const summaryByDay = resulrsForEvent(eventData)
-    const max =  summaryByDay.reduce((x,y) => Math.max(x,y),0)
+    const summaryByDay = summaryParticipantsByDay(eventData)
+    const max = summaryByDay.reduce((x, y) => Math.max(x, y), 0)
     const sum = createTablFooter(summaryByDay, 'tfoot')
     table.append(sum)
-
 }
 
-
-
-function createTablFooter(arr, param){
+function createTablFooter(arr, param) {
     const numCol = arr.length
     const sum = document.createElement(param)
     const tr = document.createElement('tr')
     sum.append(tr)
-  
     const th = document.createElement('th')
     th.scope = "col"
     th.textContent = ''
@@ -322,7 +281,7 @@ function createTablFooter(arr, param){
     return sum
 }
 
-function resulrsForEvent(eventData) {
+function summaryParticipantsByDay(eventData) {
     const avail = Object.values(eventData.participants)
     const numCol = eventData.days.length
     const numRow = Object.keys(eventData.participants).length
@@ -343,7 +302,7 @@ function editUserRecord(event, participants) {
     console.log(participants)
 }
 
-// Create Elements functons
+// Create DOM Elements functons
 function createHeader(type, text) {
     const header = document.createElement(`${type}`)
     header.textContent = text
@@ -364,9 +323,17 @@ function createBtn(btnId, text) {
     return btn
 }
 
+function createForm(id, fClass) {
+    const form = document.createElement('form')
+    form.id = id
+    form.className = fClass
+    form.action="#"
+
+    return form
+}
+
 function createCheck(text) {
-    const checkbox = document.createElement('div')
-    checkbox.className = 'form-check'
+    const checkbox = createDiv("form-check")
     const input = document.createElement('input')
     input.className = "form-check-input"
     input.type = "checkbox"
@@ -382,20 +349,21 @@ function createCheck(text) {
     return checkbox
 }
 
-function createInput(inputName, lableText) {
-    const div = document.createElement('div')
-    div.className = "col-12"
-
+function createInput(divClass, imputType, inputName, lableText) {
+    const div = createDiv(divClass)
+    const input = document.createElement('input')
+    input.className = "form-control"
+    input.type = imputType
+    input.name = inputName
+    input.required = true
+    // input.minLength = '5'
+    
     const label = document.createElement('label')
     label.className = "form-label"
     label.id = inputName
     label.textContent = lableText
-    div.append(label)
 
-    const input = document.createElement('input')
-    input.className = "form-control"
-    input.type = "text"
-    input.name = inputName
+    div.append(label)
     div.append(input)
     return div
 }
@@ -410,47 +378,44 @@ function createSubmitBtn() {
     return btn
 }
 
+function  createDiv(className){
+    const div = document.createElement('div')
+    div.className = className;
+    return div
+}
 
 
 // Weather forecast 
 function displayWeather(event) {
-    mainDiv.innerHTML = ''
+    mainDiv().innerHTML = ''
     const header = createHeader("h1", "Weather Forecast")
-    mainDiv.append(header)
-    const form = document.createElement('form')
-    form.className = "mb-3"
+    mainDiv().append(header)
+    const form =  createForm ('form', "mb-3")   
     form.addEventListener('submit', requestWeatherData)
-    mainDiv.append(form)
-    const input = createInput("zipcode", "City")
+    mainDiv().append(form)
+    const input = createInput("col-md-12", 'text',"zipcode", "City")
     form.append(input)
+    input.querySelector('input').pattern="[0-9]{5}"
     const submit = createSubmitBtn()
     form.append(submit)
-
-    // code to ask for location and dates befor request API  
-    // topick for my blog
-    // requestWeatherAPI().then((data)=> {
-    //         console.log(data.response[0].periods[0].maxTempC)
-    //     })
     function requestWeatherData(event) {
         event.preventDefault()
-        mainDiv.removeChild(form)
+        mainDiv().removeChild(form)
         const zipcode = event.target.querySelector("input[name='zipcode']").value.toString()
         //convert name to zip??
         requestWeatherAPI(zipcode).then((data) => {
             console.log(data.response[0].periods[0].maxTempC)
             displayForecast(data)
         })
-
     }
 }
 
-
 function displayForecast(data) {
     // const paragraph3 = createParagraph(``)
-    // mainDiv.append(paragraph3)
+    // mainDiv().append(paragraph3)
     const table = document.createElement('table')
     table.className = "table"
-    mainDiv.append(table)
+    mainDiv().append(table)
     const thead = document.createElement('thead')
     table.append(thead)
     const tbody = document.createElement('tbody')
@@ -486,3 +451,5 @@ function requestWeatherAPI(zipcode) {
         .catch((error) => console.error(error.message))
 
 }
+
+
