@@ -46,7 +46,6 @@ function displayList() {
         for (let element of data) {
             const div = createDiv("btn-group mb-3")
             const a = createRef(element)
-            a.addEventListener('click', getEventData)
             const span = document.createElement('span')
             //span.classList = "badge  "
             const delBtn = createBtn(element.id, "X","btn-outline-secondary")  
@@ -89,14 +88,13 @@ function displayCreateDiv(event) {
     const formName = createInput("col-md-12", "text", "event-name", 'Event name')
     const formStart = createInput("col-md-6", "date", "start-data", "From date")
     const formEnd = createInput("col-md-6", "date", "end-data", "Till date")
-    const submit = createSubmitBtn()
+    const submit = createSubmitBtn('Create Event')
     form.appendChild(formName)
     form.appendChild(formStart)
     form.appendChild(formEnd)
     form.appendChild(submit)
 }
 
-// 
 
 function calculateIntervalDates(startDate, endDate){  
     const date1 = new Date(startDate);
@@ -187,11 +185,18 @@ function openAvailabilityForm(event, eventData) {
     mainDiv().removeChild(ptcBtn)
     const tableSaction =mainDiv().querySelector('section')
     mainDiv().removeChild(tableSaction)
-   // const form = mainDiv().querySelector('#availability-form')
+   
    const form = createForm('availability-form',"mb-3")
    mainDiv().append(form)
     form.addEventListener('submit', (event) => updateEventSummary(event, eventData))  //doean't work if move to displayCurrentEvent function
-    const input = createInput("col-md-6","text","user-name", "Name")
+  
+    const closeBtn = createCloseBtn(eventData)
+    // const closeBtn = createBtn('close','',"btn-close ")
+    // closeBtn.ariaLabel = "Close"
+    // closeBtn.addEventListener('click', closeForm)
+    form.append(closeBtn)
+   // <button type="button" class="btn-close" aria-label="Close"></button>
+    const input = createInput("col-md-12","text","user-name", "Name")
     form.append(input)
     const div = document.createElement('div')
     form.append(div)
@@ -199,9 +204,11 @@ function openAvailabilityForm(event, eventData) {
         const check = createCheck(day)
         div.append(check)
     }
-    const submit = createSubmitBtn()
+    const submit = createSubmitBtn("Submit")
     form.append(submit)
 }
+
+
 
 function updateEventSummary(event, eventData) {
     event.preventDefault()
@@ -260,11 +267,6 @@ function displayAvailabilityTable(eventData, section) {
             }
             tr.append(td)
         }
-        const tdBtn = document.createElement('td')
-        tdBtn.append(document.createElement('button'))
-        tdBtn.innerText = "Remove"
-        tdBtn.addEventListener('click', (event) => editUserRecord(event, participants[i]))
-        tr.append(tdBtn)
     }
     const summaryByDay = summaryParticipantsByDay(eventData)
     const max = summaryByDay.reduce((x, y) => Math.max(x, y), 0)
@@ -287,11 +289,6 @@ function createTablFooter(arr, param) {
         th.textContent = arr[i]
         tr.append(th)
     }
-    const thBtn = document.createElement('th')
-    thBtn.scope = "col"
-    thBtn.textContent = ''
-    tr.append(thBtn)
-
     return sum
 }
 
@@ -315,6 +312,12 @@ function summaryParticipantsByDay(eventData) {
 function editUserRecord(event, participants) {
     console.log(participants)
 }
+function closeForm(event, eventData){
+console.log('close')
+const form = document.querySelector('form')
+//mainDiv().removeChild(form)
+displayCurrentEvent(eventData)
+}
 
 // Create DOM Elements functons
 function createHeader(type, text) {
@@ -337,6 +340,13 @@ function createBtn(btnId, text, classArr) {
     return btn
 }
 
+function createCloseBtn(eventData){
+const closeBtn = createBtn('close','',"btn-close ")
+closeBtn.ariaLabel = "Close"
+closeBtn.addEventListener('click', (event)=> closeForm(event, eventData))
+return closeBtn
+}
+
 function createRef(element){
     const a = document.createElement('a')
             a.dataset.eventId = element.id
@@ -344,6 +354,7 @@ function createRef(element){
             a.href = "#"
             a.classList.add("list-group-item")
             a.classList.add("list-group-item-action")
+            a.addEventListener('click', getEventData)
     return a
 }
 
@@ -392,12 +403,12 @@ function createInput(divClass, imputType, inputName, lableText) {
     return div
 }
 
-function createSubmitBtn() {
+function createSubmitBtn(text) {
     const btn = document.createElement('input')
     btn.classList.add("btn")
     btn.classList.add("btn-primary")
     btn.type = "submit"
-    btn.value = "Submit"
+    btn.value = text
     // style="background-color: #F9AA33;"
     return btn
 }
@@ -420,7 +431,7 @@ function displayWeather(event) {
     const input = createInput("col-md-12", 'text',"zipcode", "City")
     form.append(input)
     input.querySelector('input').pattern="[0-9]{5}"
-    const submit = createSubmitBtn()
+    const submit = createSubmitBtn("Show Weather")
     form.append(submit)
     function requestWeatherData(event) {
         event.preventDefault()

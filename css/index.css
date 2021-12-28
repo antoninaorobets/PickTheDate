@@ -39,10 +39,7 @@ div#main {
     text-align: center;
   }
 
-  div.btn-group:hover{
-    /* background-color: #F9AA33; */
-
-  }
+ 
   div.btn-group span {
     float: right;
     right: 0px;
@@ -90,12 +87,13 @@ div.list-group a:hover {
 }
 
 
-/* table {
- 
-} */
 
 
 /* Form */
+button.btn-close {
+  float: right;
+  right: 0px;
+}
 form {
   text-align: left;
   padding: 30px;
@@ -124,6 +122,9 @@ input[type=text], select {
     border: 1px solid #ccc;
     border-radius: 4px;
     box-sizing: border-box;
+  }
+  div.col-md-12{
+    padding-top: 20px;
   }
   input[type=submit] {
     width: 100%;

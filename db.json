@@ -1,356 +1,168 @@
 {
   "events": [
     {
-      "id": 1,
-      "title": "Party",
-      "start": "2022-01-15",
-      "end": "2022-01-15"
-    },
-    {
-      "id": 2,
-      "title": "Birthday Party",
-      "start": "2022-01-15",
-      "end": "2022-01-15"
-    },
-    {
-      "id": 3,
-      "title": "Meet all friens",
-      "start": "2022-01-15",
-      "end": "2022-01-15"
-    },
-    {
-      "id": 4,
-      "title": "Buisness talk",
-      "start": "2022-01-15",
-      "end": "2022-01-15"
-    },
-    {
-      "id": 5,
-      "title": "Ald pals",
-      "start": "2022-01-15",
-      "end": "2022-01-15"
-    },
-    {
-      "title": "qwewe",
-      "start": "2021-12-02",
-      "end": "2021-12-24",
-      "id": 6
-    },
-    {
-      "title": "",
-      "start": "",
-      "end": "",
-      "id": 7
-    },
-    {
-      "title": "",
-      "start": "",
-      "end": "",
-      "id": 8
+      "title": "Long holiday",
+      "start": "2021-12-31",
+      "end": "2022-01-13",
+      "days": [
+        "Thu Dec 30 2021",
+        "Fri Dec 31 2021",
+        "Sat Jan 01 2022",
+        "Sun Jan 02 2022",
+        "Mon Jan 03 2022",
+        "Tue Jan 04 2022",
+        "Wed Jan 05 2022",
+        "Thu Jan 06 2022",
+        "Fri Jan 07 2022",
+        "Sat Jan 08 2022",
+        "Sun Jan 09 2022",
+        "Mon Jan 10 2022",
+        "Tue Jan 11 2022",
+        "Wed Jan 12 2022"
+      ],
+      "participants": {
+        "Tonya": [
+          false,
+          false,
+          false,
+          true,
+          false,
+          false,
+          true,
+          false,
+          false,
+          true,
+          false,
+          false,
+          true,
+          false
+        ],
+        "Lala": [
+          false,
+          true,
+          true,
+          true,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false
+        ]
+      },
+      "id": 4
     },
     {
       "title": "Bithday party",
-      "start": "",
-      "end": "",
-      "id": 9
-    },
-    {
-      "title": "Bithday party",
-      "start": "2021-12-30",
-      "end": "2022-01-06",
+      "start": "2021-12-28",
+      "end": "2021-12-31",
+      "days": [
+        "Mon Dec 27 2021",
+        "Tue Dec 28 2021",
+        "Wed Dec 29 2021",
+        "Thu Dec 30 2021"
+      ],
+      "participants": {
+        "Tonya": [
+          true,
+          true,
+          true,
+          true
+        ],
+        "Monja": [
+          true,
+          true,
+          true,
+          true
+        ],
+        "Sonja": [
+          false,
+          true,
+          false,
+          false
+        ]
+      },
       "id": 10
     },
     {
       "title": "Bithday party",
-      "start": "",
-      "end": "",
-      "id": 11
-    },
-    {
-      "title": "Bithday party",
-      "start": "2021-12-02",
-      "end": "2021-12-24",
-      "id": 12
-    },
-    {
-      "title": "Bithday party",
-      "start": "2021-12-13",
-      "end": "2021-12-24",
+      "start": "2021-12-28",
+      "end": "2021-12-31",
+      "days": [
+        "Mon Dec 27 2021",
+        "Tue Dec 28 2021",
+        "Wed Dec 29 2021",
+        "Thu Dec 30 2021"
+      ],
+      "participants": {
+        "Tonya5": [
+          false,
+          true,
+          true,
+          false
+        ],
+        "Monja": [
+          true,
+          true,
+          false,
+          false
+        ],
+        "Sonja": [
+          true,
+          true,
+          true,
+          true
+        ],
+        "Lala": [
+          false,
+          false,
+          true,
+          true
+        ],
+        "Tonya A": [
+          true,
+          false,
+          true,
+          true
+        ]
+      },
       "id": 13
     },
     {
-      "title": "Bithday party",
-      "start": "Sat Dec 04 2021 19:00:00 GMT-0500 (Eastern Standard Time)",
-      "end": "2021-12-05",
-      "days": [],
-      "id": 14
-    },
-    {
-      "title": "Bithday party",
-      "start": "Fri Dec 10 2021 19:00:00 GMT-0500 (Eastern Standard Time)",
-      "end": "2021-12-10",
-      "days": "Wed Dec 01 2021 19:00:00 GMT-0500 (Eastern Standard Time),Thu Dec 02 2021 19:00:00 GMT-0500 (Eastern Standard Time),Fri Dec 03 2021 19:00:00 GMT-0500 (Eastern Standard Time),Sat Dec 04 2021 19:00:00 GMT-0500 (Eastern Standard Time),Sun Dec 05 2021 19:00:00 GMT-0500 (Eastern Standard Time),Mon Dec 06 2021 19:00:00 GMT-0500 (Eastern Standard Time),Tue Dec 07 2021 19:00:00 GMT-0500 (Eastern Standard Time),Wed Dec 08 2021 19:00:00 GMT-0500 (Eastern Standard Time),Thu Dec 09 2021 19:00:00 GMT-0500 (Eastern Standard Time),Fri Dec 10 2021 19:00:00 GMT-0500 (Eastern Standard Time)",
-      "id": 15
-    },
-    {
-      "title": "Bithday party",
-      "start": "Mon Dec 20 2021 19:00:00 GMT-0500 (Eastern Standard Time)",
-      "end": "2021-12-20",
-      "days": [
-        "2021-12-02T00:00:00.000Z",
-        "2021-12-03T00:00:00.000Z",
-        "2021-12-04T00:00:00.000Z",
-        "2021-12-05T00:00:00.000Z",
-        "2021-12-06T00:00:00.000Z",
-        "2021-12-07T00:00:00.000Z",
-        "2021-12-08T00:00:00.000Z",
-        "2021-12-09T00:00:00.000Z",
-        "2021-12-10T00:00:00.000Z",
-        "2021-12-11T00:00:00.000Z",
-        "2021-12-12T00:00:00.000Z",
-        "2021-12-13T00:00:00.000Z",
-        "2021-12-14T00:00:00.000Z",
-        "2021-12-15T00:00:00.000Z",
-        "2021-12-16T00:00:00.000Z",
-        "2021-12-17T00:00:00.000Z",
-        "2021-12-18T00:00:00.000Z",
-        "2021-12-19T00:00:00.000Z",
-        "2021-12-20T00:00:00.000Z",
-        "2021-12-21T00:00:00.000Z"
-      ],
-      "id": 16
-    },
-    {
-      "title": "Bithday party",
-      "start": "Wed Dec 29 2021 19:00:00 GMT-0500 (Eastern Standard Time)",
+      "title": "Long holiday",
+      "start": "2021-12-28",
       "end": "2022-01-06",
       "days": [
-        "2021-12-30T00:00:00.000Z",
-        "2021-12-30T00:00:00.000Z",
-        "2021-12-30T00:00:00.000Z",
-        "2021-12-30T00:00:00.000Z",
-        "2021-12-30T00:00:00.000Z",
-        "2021-12-30T00:00:00.000Z",
-        "2021-12-30T00:00:00.000Z",
-        "2021-12-30T00:00:00.000Z"
+        "Mon Dec 27 2021",
+        "Tue Dec 28 2021",
+        "Wed Dec 29 2021",
+        "Thu Dec 30 2021",
+        "Fri Dec 31 2021",
+        "Sat Jan 01 2022",
+        "Sun Jan 02 2022",
+        "Mon Jan 03 2022",
+        "Tue Jan 04 2022",
+        "Wed Jan 05 2022"
       ],
-      "id": 17
-    },
-    {
-      "title": "",
-      "start": "Mon Dec 27 2021 19:00:00 GMT-0500 (Eastern Standard Time)",
-      "end": "2021-12-31",
-      "days": [
-        "2021-12-28T00:00:00.000Z",
-        "2021-12-28T00:00:00.000Z",
-        "2021-12-28T00:00:00.000Z",
-        "2021-12-28T00:00:00.000Z"
-      ],
-      "id": 18
-    },
-    {
-      "title": "Bithday party",
-      "start": "Wed Dec 29 2021 19:00:00 GMT-0500 (Eastern Standard Time)",
-      "end": "2021-12-30",
-      "days": [
-        "2021-12-29T00:00:00.000Z",
-        "2021-12-30T00:00:00.000Z"
-      ],
-      "id": 19
-    },
-    {
-      "title": "Bithday party",
-      "start": "Wed Dec 29 2021 19:00:00 GMT-0500 (Eastern Standard Time)",
-      "end": "2021-12-30",
-      "days": [
-        "2021-12-29T00:00:00.000Z",
-        "2021-12-30T00:00:00.000Z"
-      ],
-      "id": 20
-    },
-    {
-      "title": "Bithday party",
-      "start": "Thu Dec 02 2021 19:00:00 GMT-0500 (Eastern Standard Time)",
-      "end": "2021-12-03",
-      "days": [
-        "2021-12-01",
-        "2021-12-02T00:00:00.000Z",
-        "2021-12-03T00:00:00.000Z"
-      ],
-      "id": 21
-    },
-    {
-      "title": "Bithday party",
-      "start": "Thu Dec 02 2021 19:00:00 GMT-0500 (Eastern Standard Time)",
-      "end": "2021-12-03",
-      "days": [
-        "2021-12-01",
-        "2021-12-02T00:00:00.000Z",
-        "2021-12-03T00:00:00.000Z"
-      ],
-      "id": 22
-    },
-    {
-      "title": "",
-      "start": "",
-      "end": "",
-      "days": [
-        ""
-      ],
-      "id": 23
-    },
-    {
-      "title": "",
-      "start": "",
-      "end": "",
-      "days": [
-        ""
-      ],
-      "id": 24
-    },
-    {
-      "title": "",
-      "start": "",
-      "end": "",
-      "days": [
-        ""
-      ],
-      "id": 25
-    },
-    {
-      "title": "",
-      "start": "",
-      "end": "",
-      "days": [
-        ""
-      ],
-      "id": 26
-    },
-    {
-      "title": "",
-      "start": "",
-      "end": "",
-      "days": [
-        ""
-      ],
-      "id": 27
-    },
-    {
-      "title": "",
-      "start": "",
-      "end": "",
-      "days": [
-        ""
-      ],
-      "id": 28
-    },
-    {
-      "title": "",
-      "start": "",
-      "end": "",
-      "days": [
-        ""
-      ],
-      "id": 29
-    },
-    {
-      "title": "",
-      "start": "",
-      "end": "",
-      "days": [
-        ""
-      ],
-      "id": 30
-    },
-    {
-      "title": "",
-      "start": "",
-      "end": "",
-      "days": [
-        ""
-      ],
-      "id": 31
-    },
-    {
-      "title": "",
-      "start": "",
-      "end": "",
-      "days": [
-        ""
-      ],
-      "id": 32
-    },
-    {
-      "title": "",
-      "start": "",
-      "end": "",
-      "days": [
-        ""
-      ],
-      "id": 33
-    },
-    {
-      "title": "",
-      "start": "",
-      "end": "",
-      "days": [
-        ""
-      ],
-      "id": 34
-    },
-    {
-      "title": "",
-      "start": "",
-      "end": "",
-      "days": [
-        ""
-      ],
-      "id": 35
-    },
-    {
-      "title": "",
-      "start": "",
-      "end": "",
-      "days": [
-        ""
-      ],
-      "id": 36
-    },
-    {
-      "title": "",
-      "start": "",
-      "end": "",
-      "days": [
-        ""
-      ],
-      "id": 37
-    },
-    {
-      "title": "",
-      "start": "",
-      "end": "",
-      "days": [
-        ""
-      ],
-      "id": 38
-    },
-    {
-      "title": "Bithday party",
-      "start": "2021-12-17",
-      "end": "2021-11-29",
-      "days": [
-        "2021-12-17"
-      ],
-      "id": 39
-    },
-    {
-      "title": "",
-      "start": "",
-      "end": "",
-      "days": [
-        ""
-      ],
-      "id": 40
+      "participants": {
+        "Tonya": [
+          false,
+          false,
+          true,
+          false,
+          false,
+          true,
+          false,
+          true,
+          true,
+          true
+        ]
+      },
+      "id": 14
     }
   ]
 }
