@@ -65,15 +65,7 @@ From requested data, the max and min day temperature and the weather status (sun
 API for the weather forecast for selected dates : 
 https://rapidapi.com/aerisweather-aerisweather/api/aerisweather1/
 
-{
-  method: 'GET',
-  url: 'https://aerisweather1.p.rapidapi.com/forecasts/cairo,eg',
-  params: {from: '2021-12-24', to: '2021-21-20'},
-  headers: {
-    'x-rapidapi-host': 'aerisweather1.p.rapidapi.com',
-    'x-rapidapi-key': 'SIGN-UP-FOR-KEY'
-  }
-};
+
 
 
 Response data
@@ -100,4 +92,16 @@ Response data
 }
 }
 ]
-}
+
+
+To Dos:
+
+1.
+2. Uniq user name
+
+
+- Edit => Remove and implenet delete
+4. Select all dates 
+6. verify dates in form 
+ zip code input - message if no data 
+Cansel participate form

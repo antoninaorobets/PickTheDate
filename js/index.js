@@ -23,16 +23,16 @@ function displayHome() {
     mainDiv().append(paragraph1)
     mainDiv().append(paragraph2)
     mainDiv().append(paragraph3)
-    const weatherBtn = createBtn("weather-btn", 'Check Weather')
+    const weatherBtn = createBtn("weather-btn", 'Check Weather', "btn btn-primary")
     weatherBtn.addEventListener('click', displayWeather)
     mainDiv().append(weatherBtn)
-    const eventBtn = createBtn("create-btn", 'Create Event')
+    const eventBtn = createBtn("create-btn", 'Create Event', "btn btn-primary")
     eventBtn.addEventListener('click', displayCreateDiv)
     mainDiv().append(eventBtn)
 }
 
 //Functions to handle Events List
-function displayList(event) {
+function displayList() {
     mainDiv().innerHTML = ""
     mainDiv().append(createHeader('h1','Current Event'))
 
@@ -44,18 +44,31 @@ function displayList(event) {
     mainDiv().append(list)
     function createList(data) {
         for (let element of data) {
-            const a = document.createElement('a')
-            a.dataset.eventId = element.id
-            a.textContent = element.title
-            a.href = "#"
-            a.classList.add("list-group-item")
-            a.classList.add("list-group-item-action")
+            const div = createDiv("btn-group mb-3")
+            const a = createRef(element)
             a.addEventListener('click', getEventData)
-            list.append(a)
+            const span = document.createElement('span')
+            //span.classList = "badge  "
+            const delBtn = createBtn(element.id, "X","btn-outline-secondary")  
+            delBtn.addEventListener('click', (event) => deleteEvent(event,element))
+            div.appendChild(a)
+            span.appendChild(delBtn)
+            div.appendChild(span)
+            list.append(div)
         }
     }
 }
 // Fetch functions
+function deleteEvent(event, element) {
+    console.log(element.id)
+    fetch(`http://localhost:3000/events/${element.id}`, {
+        method: "DELETE",
+    })
+        .then((response) => response.json())
+        .then(displayList)
+        .catch((error) => console.error(error.message))
+}
+
 function getEventData(event) {
     fetch('http://localhost:3000/events' + `/${event.target.dataset.eventId}`,)
         .then((response) => response.json())
@@ -76,13 +89,14 @@ function displayCreateDiv(event) {
     const formName = createInput("col-md-12", "text", "event-name", 'Event name')
     const formStart = createInput("col-md-6", "date", "start-data", "From date")
     const formEnd = createInput("col-md-6", "date", "end-data", "Till date")
-
     const submit = createSubmitBtn()
     form.appendChild(formName)
     form.appendChild(formStart)
     form.appendChild(formEnd)
     form.appendChild(submit)
 }
+
+// 
 
 function calculateIntervalDates(startDate, endDate){  
     const date1 = new Date(startDate);
@@ -154,14 +168,14 @@ function displayCurrentEvent(data) {
             `<span style="font-weight:bold">${dayOfWeek} ${dayMaxPtc.slice(4, 10)}</span><br> selected by ${MaxPtc} from ${totalPtc} particpants</p>`
         mainDiv().append(summaryDiv)
     }
-    const btn = createBtn("participate", "Participate")
+    const btn = createBtn("participate", "Participate", "btn btn-primary")
     btn.addEventListener('click', (event) => openAvailabilityForm(event, data))
     mainDiv().append(btn)
 
     const tableSaction = document.createElement('section')
     mainDiv().append(tableSaction)
     if (Object.keys(data.participants).length === 0) {
-        tableSaction.textContent = 'Tut budet tablichka'
+        tableSaction.textContent = 'When your friends select days, when they can meet with you result appears on here. '
     }
     else {
         displayAvailabilityTable(data, tableSaction)
@@ -314,13 +328,23 @@ function createParagraph(text) {
     return paragraph
 }
 
-function createBtn(btnId, text) {
+function createBtn(btnId, text, classArr) {
     const btn = document.createElement('button')
     btn.textContent = text
     btn.id = btnId
-    btn.classList.add("btn")
-    btn.classList.add("btn-primary")
+  //  btn.classList.add("btn")
+    btn.className = classArr
     return btn
+}
+
+function createRef(element){
+    const a = document.createElement('a')
+            a.dataset.eventId = element.id
+            a.textContent = element.title
+            a.href = "#"
+            a.classList.add("list-group-item")
+            a.classList.add("list-group-item-action")
+    return a
 }
 
 function createForm(id, fClass) {
