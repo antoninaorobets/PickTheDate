@@ -104,8 +104,9 @@ function calculateIntervalDates(startDate, endDate){
     const interval = Math.round(diffInTime / oneDay);
     let start = startDate
     const startDay = new Date(start)
-    const dateRange = [startDay.toString().slice(0,15)]
-    for (let i = 0; i < interval; i++) {
+   // const dateRange = [startDay.toString().slice(0,15)]
+   const dateRange = []
+    for (let i = 0; i <= interval; i++) {
         let d = new Date(start)
         d.setDate(d.getDate() + 1)   
         dateRange.push(d.toString().slice(0,15))
@@ -128,12 +129,18 @@ function createEvent(event) {
     const start = event.target.querySelector("input[name='start-data']").value
     const end = event.target.querySelector("input[name='end-data']").value
     const dateRange = calculateIntervalDates(start, end)
+    let weather  
+       requestWeatherAPI("07030" ,start, end)
+       .then((data) => {
+        console.log(data.response[0].periods)
+        weather=data.response[0].periods
     const formData = {
         "title": `${input}`,
         "start": `${start}`,
         "end": `${end}`,
         "days": dateRange,
-        "participants": {}
+        "participants": {},
+        "periods": weather
     }
     fetch('http://localhost:3000/events', {
         method: "POST",
@@ -146,6 +153,8 @@ function createEvent(event) {
         .then((response) => response.json())
         .then(displayCurrentEvent)
         .catch((error) => console.error(error))
+
+    })
 }
 
 
@@ -191,11 +200,7 @@ function openAvailabilityForm(event, eventData) {
     form.addEventListener('submit', (event) => updateEventSummary(event, eventData))  //doean't work if move to displayCurrentEvent function
   
     const closeBtn = createCloseBtn(eventData)
-    // const closeBtn = createBtn('close','',"btn-close ")
-    // closeBtn.ariaLabel = "Close"
-    // closeBtn.addEventListener('click', closeForm)
     form.append(closeBtn)
-   // <button type="button" class="btn-close" aria-label="Close"></button>
     const input = createInput("col-md-12","text","user-name", "Name")
     form.append(input)
     const div = document.createElement('div')
@@ -248,9 +253,12 @@ function displayAvailabilityTable(eventData, section) {
 
     const dates = createTablFooter(eventData.days, 'thead')
     table.append(dates)
-    // availability
-    const tbody = document.createElement('tbody')
-    table.append(tbody)
+      // availability
+      const tbody = document.createElement('tbody')
+      table.append(tbody)
+    //weather
+
+    
     const participants = Object.keys(eventData.participants)
     for (let i = 0; i < participants.length; i++) {
         // for (let i = participants.length-1; i >= 0 ; i--) {
@@ -270,8 +278,27 @@ function displayAvailabilityTable(eventData, section) {
     }
     const summaryByDay = summaryParticipantsByDay(eventData)
     const max = summaryByDay.reduce((x, y) => Math.max(x, y), 0)
-    const sum = createTablFooter(summaryByDay, 'tfoot')
-    table.append(sum)
+  //  const sum = createTablFooter(summaryByDay, 'tfoot')
+    const sum = document.createElement("tfoot")
+    const weather = displayWeatherTable(eventData,sum)
+    tbody.append(weather)
+   // table.append(sum)
+}
+
+function displayWeatherTable(data,tbody){
+    const tr = document.createElement('tr')
+    
+        tbody.append(tr)
+        const td = document.createElement('th')
+        tr.append(td)
+    td.scope = "col"
+    td.textContent = "Weather"
+    for (let day of data.periods) {
+        const td = document.createElement('th')
+        td.innerHTML = `${day.maxTempC}C /${day.minTempC}C`
+        tr.append(td)
+    }
+return tr
 }
 
 function createTablFooter(arr, param) {
@@ -286,7 +313,9 @@ function createTablFooter(arr, param) {
     for (let i = 0; i < numCol; i++) {
         const th = document.createElement('th')
         th.scope = "col"
-        th.textContent = arr[i]
+        if (param === 'thead') {
+        th.textContent = arr[i].slice(0,10)}
+        else{th.textContent = arr[i]}
         tr.append(th)
     }
     return sum
@@ -438,7 +467,7 @@ function displayWeather(event) {
         mainDiv().removeChild(form)
         const zipcode = event.target.querySelector("input[name='zipcode']").value.toString()
         //convert name to zip??
-        requestWeatherAPI(zipcode).then((data) => {
+        requestWeatherAPI(zipcode,"2021-12-30","2022-01-03").then((data) => {
             console.log(data.response[0].periods[0].maxTempC)
             displayForecast(data)
         })
@@ -472,10 +501,11 @@ function displayForecast(data) {
 
 
 
-function requestWeatherAPI(zipcode) {
+function requestWeatherAPI(zipcode,start,end) {
     // location, start,end
-
-    return fetch(`https://aerisweather1.p.rapidapi.com/forecasts/${zipcode}?from=2021-12-30&to=2022-01-19`, {
+    const url = `https://aerisweather1.p.rapidapi.com/forecasts/${zipcode}?from=${start}&to=${end}`
+    console.log(url)
+    return fetch(url, {
         "method": "GET",
         "headers": {
             "x-rapidapi-host": "aerisweather1.p.rapidapi.com",
@@ -488,3 +518,4 @@ function requestWeatherAPI(zipcode) {
 }
 
 
+// https://aerisweather1.p.rapidapi.com/forecasts/$07030?from=2022-01-01start&to=2022-01-01
