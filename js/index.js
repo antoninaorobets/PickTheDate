@@ -75,8 +75,6 @@ function getEventData(event) {
         .catch((error) => console.error(error.message))
 }
 
-
-
 //Functions to handle create Event
 function displayCreateDiv(event) {
     mainDiv().innerHTML = ""
@@ -84,7 +82,6 @@ function displayCreateDiv(event) {
     mainDiv().append(h1)
     const form = createForm ("new-event", "row g-3")
     form.addEventListener('submit', createEvent)
-  //  form.onsubmit = validateDates
     mainDiv().append(form)
     const formName = createInput("col-md-12", "text", "event-name", 'Event name')
     const formStart = createInput("col-md-6 has-validation", "date", "start-data", "From date")
@@ -94,9 +91,7 @@ function displayCreateDiv(event) {
     form.appendChild(formStart)
     form.appendChild(formEnd)
     form.appendChild(submit)
-
 }
-
 
 function calculateIntervalDates(start, end){  
     const startDate = new Date(start); // convert data from inputs to Date object
@@ -127,29 +122,28 @@ function isValidDates(){
     const start = document.querySelector("input[name='start-data']")
     const end = document.querySelector("input[name='end-data']")
     const today = new Date()
-    const startDate = new Date(start.value)
+    today.setHours(0,0,0,0)
+    const startDate = new Date(start.value.replace(/-/g, '\/'))
+ 
+    console.log(start.value, "today", today, " \n  ", "startDate",startDate)
     const endDate = new Date(end.value)
-    const dif =  startDate.getTime() - today.getTime()
-    console.log("startDate", startDate, "endDate",endDate, 'today',today)
-    console.log(startDate.getTime() - today.getTime() )
-    const validtion = createDiv("invalid-feedback")
     if (startDate.getTime() - today.getTime() < 0) {
         alert( "Start date can't be elier then today " );
         start.focus() 
-
-        return false}
-     if (endDate.getTime() - startDate.getTime() < 0)
-    {
+        return false
+    }
+     if (endDate.getTime() - startDate.getTime() < 0) {
         alert( "End Date can't be elier then start Date " );
         end.focus()
-        return false}
+        return false
+    }
 }
 
 function createEvent(event) {
     event.preventDefault()
     const input = event.target.querySelector("input[name='event-name']").value
-    const start = event.target.querySelector("input[name='start-data']").value
-    const end = event.target.querySelector("input[name='end-data']").value
+    const start = event.target.querySelector("input[name='start-data']").value.replace(/-/g, '\/')
+    const end = event.target.querySelector("input[name='end-data']").value.replace(/-/g, '\/')
     //const valid = isValidDates()
     if (!isValidDates()) {return false}
     const dateRange = calculateIntervalDates(start, end)
