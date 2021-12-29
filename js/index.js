@@ -485,7 +485,12 @@ function displayWeather(event) {
         mainDiv().removeChild(form)
         const zipcode = event.target.querySelector("input[name='zipcode']").value.toString()
         //convert name to zip??
-        requestWeatherAPI(zipcode,"2021-12-30","2022-01-03").then((data) => {
+        const today = new Date()
+        const day1 = today.getFullYear().toString()+'-'+(today.getMonth()+1).toString()+"-"+today.getDate().toString()
+        const next =  new Date(today.setDate(today.getDate() + 14) )
+        const day14 = next.getFullYear().toString()+'-'+(next.getMonth()+1).toString()+"-"+next.getDate().toString()
+        console.log(day1, day14)
+        requestWeatherAPI(zipcode,day1,day14).then((data) => {
             console.log(data.response[0].periods[0].maxTempC)
             displayForecast(data)
         })
