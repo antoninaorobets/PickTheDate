@@ -84,34 +84,35 @@ function displayCreateDiv(event) {
     mainDiv().append(h1)
     const form = createForm ("new-event", "row g-3")
     form.addEventListener('submit', createEvent)
+  //  form.onsubmit = validateDates
     mainDiv().append(form)
     const formName = createInput("col-md-12", "text", "event-name", 'Event name')
-    const formStart = createInput("col-md-6", "date", "start-data", "From date")
+    const formStart = createInput("col-md-6 has-validation", "date", "start-data", "From date")
     const formEnd = createInput("col-md-6", "date", "end-data", "Till date")
     const submit = createSubmitBtn('Create Event')
     form.appendChild(formName)
     form.appendChild(formStart)
     form.appendChild(formEnd)
     form.appendChild(submit)
+
 }
 
 
-function calculateIntervalDates(startDate, endDate){  
-    const date1 = new Date(startDate);
-    const date2 = new Date(endDate);
-    const oneDay = 1000 * 60 * 60 * 24;
-    const diffInTime = date2.getTime() - date1.getTime();
+function calculateIntervalDates(start, end){  
+    const startDate = new Date(start); // convert data from inputs to Date object
+    const endDate = new Date(end);
+    const oneDay = 1000 * 60 * 60 * 24; // colculate how many meliseconds in one ay
+    const diffInTime = endDate.getTime() - startDate.getTime();
     const interval = Math.round(diffInTime / oneDay);
-    let start = startDate
-    const startDay = new Date(start)
-   // const dateRange = [startDay.toString().slice(0,15)]
+    // for add data for each day from the interwal
+    let variable = start
+    //create ampty array to add each day to it
    const dateRange = []
     for (let i = 0; i <= interval; i++) {
-        let d = new Date(start)
-        d.setDate(d.getDate() + 1)   
-        dateRange.push(d.toString().slice(0,15))
-        start = d
-        console.log(d)
+        let day = new Date(variable)
+        day.setDate(day.getDate() + 1)   
+        dateRange.push(day.toString().slice(0,15))
+        variable = day
     }
     return dateRange
 }
@@ -122,12 +123,35 @@ function reternDayOfWeek(day){
      return days[a.getDay()]
 }
 
+function isValidDates(){
+    const start = document.querySelector("input[name='start-data']")
+    const end = document.querySelector("input[name='end-data']")
+    const today = new Date()
+    const startDate = new Date(start.value)
+    const endDate = new Date(end.value)
+    const dif =  startDate.getTime() - today.getTime()
+    console.log("startDate", startDate, "endDate",endDate, 'today',today)
+    console.log(startDate.getTime() - today.getTime() )
+    const validtion = createDiv("invalid-feedback")
+    if (startDate.getTime() - today.getTime() < 0) {
+        alert( "Start date can't be elier then today " );
+        start.focus() 
+
+        return false}
+     if (endDate.getTime() - startDate.getTime() < 0)
+    {
+        alert( "End Date can't be elier then start Date " );
+        end.focus()
+        return false}
+}
 
 function createEvent(event) {
     event.preventDefault()
     const input = event.target.querySelector("input[name='event-name']").value
     const start = event.target.querySelector("input[name='start-data']").value
     const end = event.target.querySelector("input[name='end-data']").value
+    //const valid = isValidDates()
+    if (!isValidDates()) {return false}
     const dateRange = calculateIntervalDates(start, end)
     let weather  
        requestWeatherAPI("07030" ,start, end)
