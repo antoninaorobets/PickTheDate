@@ -118,25 +118,23 @@ function reternDayOfWeek(day){
      return days[a.getDay()]
 }
 
-function isValidDates(){
-    const start = document.querySelector("input[name='start-data']")
-    const end = document.querySelector("input[name='end-data']")
+function isValidDates(start,end){
     const today = new Date()
     today.setHours(0,0,0,0)
-    const startDate = new Date(start.value.replace(/-/g, '\/'))
- 
-    console.log(start.value, "today", today, " \n  ", "startDate",startDate)
-    const endDate = new Date(end.value)
+    const startDate = new Date(start)
+    const endDate = new Date(end)
     if (startDate.getTime() - today.getTime() < 0) {
+   // if (startDate< today) {
         alert( "Start date can't be elier then today " );
-        start.focus() 
+        document.querySelector("input[name='start-data']").focus() 
         return false
     }
      if (endDate.getTime() - startDate.getTime() < 0) {
         alert( "End Date can't be elier then start Date " );
-        end.focus()
+        document.querySelector("input[name='end-data']").focus()
         return false
     }
+    return true;
 }
 
 function createEvent(event) {
@@ -144,8 +142,7 @@ function createEvent(event) {
     const input = event.target.querySelector("input[name='event-name']").value
     const start = event.target.querySelector("input[name='start-data']").value.replace(/-/g, '\/')
     const end = event.target.querySelector("input[name='end-data']").value.replace(/-/g, '\/')
-    //const valid = isValidDates()
-    if (!isValidDates()) {return false}
+    if (!isValidDates(start,end)) {return false}
     const dateRange = calculateIntervalDates(start, end)
     let weather  
        requestWeatherAPI("07030" ,start, end)
