@@ -189,7 +189,8 @@ function displayCurrentEvent(data) {
         summaryDiv.innerHTML = '<p>The most popular date for this event: ' +
             `<span style="font-weight:bold">${dayOfWeek} ${dayMaxPtc.slice(4, 10)}</span><br> selected by ${MaxPtc} from ${totalPtc} particpants</p>`
         mainDiv().append(summaryDiv)
-    }
+    } 
+    const instruction = document.createParagraph('Press the "Participate" button to select days when you can meet with your friends.')
     const btn = createBtn("participate", "Participate", "btn btn-primary")
     btn.addEventListener('click', (event) => openAvailabilityForm(event, data))
     mainDiv().append(btn)
@@ -197,7 +198,7 @@ function displayCurrentEvent(data) {
     const tableSaction = document.createElement('section')
     mainDiv().append(tableSaction)
     if (Object.keys(data.participants).length === 0) {
-        tableSaction.textContent = 'When your friends select days, when they can meet with you result appears on here. '
+        tableSaction.textContent = 'Here will be a list of dates when your friends can meet with you. '
     }
     else {
         displayAvailabilityTable(data, tableSaction)
