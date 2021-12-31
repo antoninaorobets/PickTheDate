@@ -190,7 +190,8 @@ function displayCurrentEvent(data) {
             `<span style="font-weight:bold">${dayOfWeek} ${dayMaxPtc.slice(4, 10)}</span><br> selected by ${MaxPtc} from ${totalPtc} particpants</p>`
         mainDiv().append(summaryDiv)
     } 
-    const instruction = document.createParagraph('Press the "Participate" button to select days when you can meet with your friends.')
+    const instruction = createParagraph('Press the "Participate" button to select days when you can meet with your friends.')
+    mainDiv().append(instruction)
     const btn = createBtn("participate", "Participate", "btn btn-primary")
     btn.addEventListener('click', (event) => openAvailabilityForm(event, data))
     mainDiv().append(btn)
